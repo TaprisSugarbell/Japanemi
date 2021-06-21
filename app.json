@@ -1,0 +1,51 @@
+{
+    "name": "Japanemi",
+    "description": "Este bot permite subir anime a un canal...",
+    "logo": "https://i.imgur.com/S4Zlx0G.png",
+    "keywords": [
+        "Codez",
+        "Nuclear",
+        "Telegram Bot",
+        "SayuOgiwara"
+    ],
+    "repository": "https://github.com/TaprisSugarbell/Japanemi",
+    "success_url": "https://telegram.dog/SayuCodez",
+    "env": {
+        "WEBHOOK": {
+            "description": "Dejalo así!",
+            "value": "ANYTHING"
+        },
+        "bot_token": {
+            "description": "Tu Token de Telegram de @BotFather",
+            "value": ""
+        },
+        "api_id": {
+            "description": "Obtener de my.telegram.org",
+            "value": ""
+        },
+        "api_hash": {
+            "description": "Obtener de my.telegram.org",
+            "value": ""
+        },
+        "AUTH_USERS": {
+          "description": "Usuarios permitidos",
+          "value": "784148805"
+        },
+        "channel_id": "Canal de Telegram",
+        "value": ""
+    },
+    "addons": [],
+    "buildpacks": [{
+        "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+    }, {
+        "url": "https://github.com/opendoor-labs/heroku-buildpack-p7zip"
+    }, {
+        "url": "heroku/python"
+    }],
+    "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}
