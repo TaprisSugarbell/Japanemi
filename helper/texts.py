@@ -8,6 +8,6 @@ async def capupload_text(title):
     twg = " ".join(title.split(" ")[:-1])
     caption =\
         f"#{twc}_{cap}\n" \
-        f"💮*Anime: {twg}*\n" \
+        f"💮*{twg}*\n" \
         f"🗂*Capítulo {cap}*"
     return caption

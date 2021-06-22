@@ -40,14 +40,16 @@ async def callback_data(bot, update):
                 yes_thumb = False
                 print(e)
             if yes_thumb:
-                await bot.send_video(chat_id=chat_id,
+                await bot.send_video(chat_id=CHANNEL_ID,
                                      video=path,
                                      thumb=f"{tmp_directory}thumb.jpg",
-                                     caption=caption)
+                                     caption=caption,
+                                     parse_mode="md")
             else:
-                await bot.send_video(chat_id=chat_id,
+                await bot.send_video(chat_id=CHANNEL_ID,
                                      video=path,
-                                     caption=caption)
+                                     caption=caption,
+                                     parse_mode="md")
             rmtree(tmp_directory)
     else:
         pass
