@@ -253,10 +253,7 @@ async def foriter(links=None, out="./", custom=""):
         try:
             out_ = await download_file(url, out, custom)
             out_ = out_[0]
-            no_error = True
+            break
         except:
             out_ = None
-            no_error = False
-        if no_error:
-            break
     return out_
