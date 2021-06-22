@@ -1,7 +1,10 @@
 import os
+import random
+import string
 from shutil import rmtree
 from pyrogram import Client
 from dotenv import load_dotenv
+from plugins.Japanemi import buttons
 from helper.texts import capupload_text
 from moviepy.editor import VideoFileClip
 from Japanemi_features.episodes import episodes
@@ -21,8 +24,10 @@ async def callback_data(bot, update):
     tmp_directory = "./Downloads/" + str(update.from_user.id) + "/"
     if not os.path.isdir(tmp_directory):
         os.makedirs(tmp_directory)
+    # ****************************************************************
     if chat_id in AUTH_USERS:
         data = update.data
+        # *****************************
         if "!" in data:
             data = int(data.split("!")[0])
             actu = await episodes()
@@ -54,5 +59,13 @@ async def callback_data(bot, update):
                                      caption=caption,
                                      duration=duration)
             rmtree(tmp_directory)
+        if data == "reload":
+            key = string.hexdigits
+            rch = "".join([random.choice(key) for i in range(5)])
+            inline = await buttons()
+            await bot.edit_message_text(chat_id=chat_id,
+                                        message_id=message_id,
+                                        text=f"#{rch}\nUltimos episodios",
+                                        reply_markup=inline)
     else:
         pass
