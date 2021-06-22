@@ -29,9 +29,25 @@ async def callback_data(bot, update):
             links = Downcap(actu["episodes"][data]).get_url()
             path = await foriter(links, tmp_directory)
             caption = await capupload_text(title)
-            await bot.send_video(chat_id=chat_id,
-                                 video=path,
-                                 caption=caption)
+            try:
+                list_dir_ = os.listdir(tmp_directory)
+                print(list_dir_)
+                if "thumb.jpg" in list_dir_:
+                    yes_thumb = True
+                else:
+                    yes_thumb = False
+            except Exception as e:
+                yes_thumb = False
+                print(e)
+            if yes_thumb:
+                await bot.send_video(chat_id=chat_id,
+                                     video=path,
+                                     thumb=f"{tmp_directory}thumb.jpg",
+                                     caption=caption)
+            else:
+                await bot.send_video(chat_id=chat_id,
+                                     video=path,
+                                     caption=caption)
             rmtree(tmp_directory)
     else:
         pass
