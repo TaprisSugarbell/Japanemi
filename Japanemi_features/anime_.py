@@ -259,4 +259,5 @@ async def foriter(links=None, out="./", custom=""):
             no_error = True
         except:
             out_ = None
+        count += 1
     return out_
