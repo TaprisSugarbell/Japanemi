@@ -7,7 +7,7 @@ from Japanemi_features.episodes import episodes
 from Japanemi_features.anime_ import Downcap, foriter
 
 load_dotenv()
-CHANNEL_ID = os.getenv("channel_id")
+CHANNEL_ID = int(os.getenv("channel_id"))
 AUTH_USERS_STR = os.getenv("AUTH_USERS")
 AUTH_USERS = [int(i) for i in AUTH_USERS_STR.split(" ")]
 
