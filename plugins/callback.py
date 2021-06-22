@@ -1,4 +1,5 @@
 import os
+from shutil import rmtree
 from pyrogram import Client
 from dotenv import load_dotenv
 from helper.texts import capupload_text
@@ -15,6 +16,10 @@ AUTH_USERS = [int(i) for i in AUTH_USERS_STR.split(" ")]
 async def callback_data(bot, update):
     chat_id = update.from_user.id
     message_id = update.message.message_id
+    # Carpeta
+    tmp_directory = "./Downloads/" + str(update.from_user.id) + "/"
+    if not os.path.isdir(tmp_directory):
+        os.makedirs(tmp_directory)
     if chat_id in AUTH_USERS:
         data = update.data
         if "!" in data:
@@ -22,10 +27,11 @@ async def callback_data(bot, update):
             actu = await episodes()
             title = actu["titles"][data]
             links = Downcap(actu["episodes"][data]).get_url()
-            path = await foriter(links, f"./Downloads/{chat_id}/")
+            path = await foriter(links, tmp_directory)
             caption = await capupload_text(title)
             await bot.send_video(chat_id=chat_id,
                                  video=path,
                                  caption=caption)
+            rmtree(tmp_directory)
     else:
         pass
