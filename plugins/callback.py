@@ -3,6 +3,7 @@ from shutil import rmtree
 from pyrogram import Client
 from dotenv import load_dotenv
 from helper.texts import capupload_text
+from moviepy.editor import VideoFileClip
 from Japanemi_features.episodes import episodes
 from Japanemi_features.anime_ import Downcap, foriter
 
@@ -31,7 +32,6 @@ async def callback_data(bot, update):
             caption = await capupload_text(title)
             try:
                 list_dir_ = os.listdir(tmp_directory)
-                print(list_dir_)
                 if "thumb.jpg" in list_dir_:
                     yes_thumb = True
                 else:
@@ -39,17 +39,20 @@ async def callback_data(bot, update):
             except Exception as e:
                 yes_thumb = False
                 print(e)
+            clip = VideoFileClip(path)
+            duration = int(clip.duration)
+            print(duration)
             if yes_thumb:
                 await bot.send_video(chat_id=CHANNEL_ID,
                                      video=path,
                                      thumb=f"{tmp_directory}thumb.jpg",
                                      caption=caption,
-                                     parse_mode="md")
+                                     duration=duration)
             else:
                 await bot.send_video(chat_id=CHANNEL_ID,
                                      video=path,
                                      caption=caption,
-                                     parse_mode="md")
+                                     duration=duration)
             rmtree(tmp_directory)
     else:
         pass
