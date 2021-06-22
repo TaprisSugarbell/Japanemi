@@ -251,13 +251,14 @@ async def foriter(links=None, out="./", custom=""):
     out_ = ""
     count = 0
     no_error = False
-    while no_error:
+    while not no_error:
         url = links[count]
         try:
             out_ = await download_file(url, out, custom)
             out_ = out_[0]
             no_error = True
-        except:
+        except Exception as e:
             out_ = None
+            no_error = False
         count += 1
     return out_
