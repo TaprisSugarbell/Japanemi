@@ -38,23 +38,7 @@ async def file_recognize(filename, out="./"):
 
 async def generic_extractor(url, out="./", custom=""):
     video_info = youtube_dl.YoutubeDL().extract_info(url, download=False)
-    # Thumbnail?
-    try:
-        try:
-            thumbnail = video_info["thumbnail"]
-        except KeyError:
-            thumbnail = video_info["entries"][0]["thumbnail"]
-        data = wget.download(thumbnail, out)
-        if data[-4:] == "webp":
-            image = Image.open(data).convert("RGB")
-            image.save(out + "thumb.jpg", "jpeg")
-            os.unlink(data)
-        elif data[-4:] == ".jpg":
-            os.rename(data, out + "thumb.jpg")
-        else:
-            os.rename(data, out + "thumb.jpg")
-    except Exception as e:
-        print(e)
+    videos = ["mp4", "mkv", "webm"]
     # Demás datos, title, ext
     if len(custom) > 0:
         _title = custom
@@ -64,6 +48,8 @@ async def generic_extractor(url, out="./", custom=""):
         _ext = video_info["ext"]
     except KeyError:
         _ext = video_info["entries"][0]["formats"][0]["ext"]
+    if _title.split(".")[-1] in videos:
+        _title = _title.split(".")[0]
     # Options + Download
     options = {"format": "bestaudio+bestvideo/best",
                "outtmpl": out + _title + "." + _ext}
@@ -71,16 +57,15 @@ async def generic_extractor(url, out="./", custom=""):
         ydl.download([url])
     # Filename
     out_ = out + _title + "." + _ext
-    try:
-        list_dir_ = os.listdir(out)
-        print(list_dir_)
-        if "thumb.jpg" in list_dir_:
-            yes_thumb = True
-        else:
-            yes_thumb = False
-    except Exception as e:
+    # Obtiene el tipo de archivo
+    file_data = await file_recognize(out_, out)
+    file_type = file_data["type"]
+    # Si es video trata de obtener capturas
+    if file_type == "video":
+        await generate_screen_shots(out_, out, 300, 1)
+        yes_thumb = True
+    else:
         yes_thumb = False
-        print(e)
     return {"file": out_,
             "thumb": yes_thumb}
 
