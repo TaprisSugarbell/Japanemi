@@ -42,7 +42,7 @@ async def callback_data(bot, update):
             if "hla" in data:
                 inline = await hla_buttons()
             elif "ta" in data:
-                inline = await buttons()
+                inline = await ta_buttons()
             await bot.edit_message_text(chat_id=chat_id,
                                         message_id=message_id,
                                         text=f"#{rch}\nUltimos episodios",
