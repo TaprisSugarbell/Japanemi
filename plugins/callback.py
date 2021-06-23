@@ -1,9 +1,8 @@
 import os
 import random
 import string
-from pyrogram import Client
+from helper.buttons import *
 from plugins.Japanemi import *
-from dotenv import load_dotenv
 from helper.callback_helper import *
 
 load_dotenv()
