@@ -23,7 +23,7 @@ async def ta_buttons():
     if calc in count:
         pairs.append((stress[-1],))
     new_pair = pairs[:9]
-    new_pair.append((InlineKeyboardButton("Hentaila", callback_data="hentai_"),
+    new_pair.append((InlineKeyboardButton("Hentai", callback_data="hentai_"),
                      InlineKeyboardButton("Reload", callback_data="reloadta")))
     inline = InlineKeyboardMarkup(new_pair)
     return inline
