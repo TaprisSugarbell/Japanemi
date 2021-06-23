@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-async def episodes():
+async def ta_episodes():
     r = requests.get(f"https://tioanime.com/")
     soup = BeautifulSoup(r.content, "html.parser")
     article = soup.find_all(attrs={"class": "episode"})

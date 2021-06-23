@@ -12,7 +12,7 @@ async def buttons():
 
 
 async def ta_buttons():
-    actu = await episodes()
+    actu = await ta_episodes()
     title = actu["titles"]
     stress = [InlineKeyboardButton(f"{title[i]}",
                                    callback_data=f"{i}!") for i in range(len(title))]

@@ -13,6 +13,7 @@ AUTH_USERS = [int(i) for i in AUTH_USERS_STR.split(" ")]
 
 @Client.on_callback_query()
 async def callback_data(bot, update):
+    inline = None
     chat_id = update.from_user.id
     message_id = update.message.message_id
     # Carpeta
@@ -26,9 +27,13 @@ async def callback_data(bot, update):
         if "_" in data:
             data = data.split("_")[0]
             if data == "hentai":
-                await hla_buttons()
-            if data == "anime":
-                await ta_buttons()
+                inline = await hla_buttons()
+            elif data == "anime":
+                inline = await ta_buttons()
+            await bot.edit_message_text(chat_id=chat_id,
+                                        message_id=message_id,
+                                        text=f"Ultimos episodios",
+                                        reply_markup=inline)
         elif "!" in data:
             await ta_callback(bot, data, tmp_directory)
         elif "|" in data:
@@ -36,7 +41,6 @@ async def callback_data(bot, update):
         elif "reload" in data:
             key = string.hexdigits
             rch = "".join([random.choice(key) for i in range(5)])
-            inline = None
             if "hla" in data:
                 inline = await hla_buttons()
             elif "ta" in data:

@@ -14,7 +14,7 @@ async def anime(bot, update):
     message_id = update.message_id
     inline = await buttons()
     await bot.send_message(chat_id=chat_id,
-                           text="Ultimos episodios",
+                           text="Que buscas?",
                            reply_markup=inline,
                            reply_to_message_id=message_id)
 
