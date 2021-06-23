@@ -1,7 +1,5 @@
-import os
 import random
 import string
-from helper.buttons import *
 from plugins.Japanemi import *
 from helper.callback_helper import *
 
