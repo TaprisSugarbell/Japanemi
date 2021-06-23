@@ -23,7 +23,7 @@ async def ta_episodes():
 async def hla_episodes():
     r = requests.get("https://hentaila.com")
     soup = BeautifulSoup(r.content, "html.parser")
-    article = soup.find_all(attrs={"class": "item"})
+    article = soup.find_all(attrs={"class": "hentai episode"})
     info = {}
     animes = []
     portadas = []
@@ -31,7 +31,8 @@ async def hla_episodes():
     for i in article:
         animes.append(f'https://hentaila.com{i.find("a").get("href")}')
         portadas.append(f'https://hentaila.com{i.find("img").get("src")}')
-        titles.append(i.find("h2").text.strip())
+        titles.append(i.find("h2").text.strip() +
+                      i.find("span").text.replace("Episodio", ""))
     info["episodes"] = animes
     info["portadas"] = portadas
     info["titles"] = titles
