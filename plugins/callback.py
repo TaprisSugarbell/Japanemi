@@ -24,7 +24,13 @@ async def callback_data(bot, update):
     if chat_id in AUTH_USERS:
         data = update.data
         # *****************************
-        if "!" in data:
+        if "_" in data:
+            data = data.split("_")[0]
+            if data == "hentai":
+                await hla_buttons()
+            if data == "anime":
+                await ta_buttons()
+        elif "!" in data:
             await ta_callback(bot, data, tmp_directory)
         elif "|" in data:
             await hla_callback(bot, data, tmp_directory)

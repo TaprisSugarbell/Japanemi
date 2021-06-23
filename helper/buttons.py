@@ -3,8 +3,8 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 async def buttons():
-    btn1 = InlineKeyboardButton("Anime", callback_data="anime!")
-    btn2 = InlineKeyboardButton("Hentai", callback_data="hentai|")
+    btn1 = InlineKeyboardButton("Anime", callback_data="anime_")
+    btn2 = InlineKeyboardButton("Hentai", callback_data="hentai_")
     inline = InlineKeyboardMarkup([
         [btn1, btn2]
     ])

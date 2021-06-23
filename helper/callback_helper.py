@@ -44,7 +44,7 @@ async def ta_callback(bot, data, tmp_directory):
 
 
 async def hla_callback(bot, data, tmp_directory):
-    data = int(data.split("!")[0])
+    data = int(data.split("|")[0])
     actu = await hla_episodes()
     title = actu["titles"][data]
     links = Downcap(actu["episodes"][data]).get_url()
