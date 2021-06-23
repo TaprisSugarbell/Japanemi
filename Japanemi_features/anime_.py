@@ -20,6 +20,8 @@ class Downcap:
             site = "ta"
         elif site_ == "www.animefenix.com":
             site = "af"
+        elif site_ == "hentaila.com":
+            site = "hla"
         else:
             site = False
         return site
@@ -76,6 +78,24 @@ class Downcap:
             lnk.append(url)
         return lnk
 
+    def hla_scraping(self):
+        r = requests.get(self.url)
+        soup = BeautifulSoup(r.content, "html.parser")
+        script = soup.find_all("script")[-4]
+        lest = script.contents[0].strip().split(";")[3].split("var videos = ")[1]
+        json_dumps = lest.replace(
+            "[", "{").replace("]", "}").replace("},{", ",").replace(
+            "\\", "").replace('","', '":"').replace(",0", "")[1:-1]
+        json_bruh = json.loads(json_dumps).values()
+        soup = BeautifulSoup(r.content, 'html.parser')
+        lnk = []
+        for i in json_bruh:
+            lnk.append(i)
+        for script in soup.find_all(attrs={"class": "btn sm rnd"}):
+            url = script['href']
+            lnk.append(url)
+        return lnk
+
     def get_url(self):
         site = self.site_filter()
         if site == "ta":
@@ -84,6 +104,8 @@ class Downcap:
             lnk = self.mc_scraping()
         elif site == "af":
             lnk = self.af_scraping()
+        elif site == "hla":
+            lnk = self.hla_scraping()
         return lnk
 
 
