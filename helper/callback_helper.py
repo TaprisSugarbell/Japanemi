@@ -8,11 +8,12 @@ from Japanemi_features.anime_ import Downcap, foriter
 
 load_dotenv()
 CHANNEL_ID = int(os.getenv("channel_id"))
+CHANNEL_H = int(os.getenv("channel_idh"))
 
 
 async def ta_callback(bot, data, tmp_directory):
     data = int(data.split("!")[0])
-    actu = await episodes()
+    actu = await ta_episodes()
     title = actu["titles"][data]
     links = Downcap(actu["episodes"][data]).get_url()
     path = await foriter(links, tmp_directory)
@@ -63,13 +64,13 @@ async def hla_callback(bot, data, tmp_directory):
     duration = int(clip.duration)
     print(duration)
     if yes_thumb:
-        await bot.send_video(chat_id=CHANNEL_ID,
+        await bot.send_video(chat_id=CHANNEL_H,
                              video=path,
                              thumb=f"{tmp_directory}thumb.jpg",
                              caption=caption,
                              duration=duration)
     else:
-        await bot.send_video(chat_id=CHANNEL_ID,
+        await bot.send_video(chat_id=CHANNEL_H,
                              video=path,
                              caption=caption,
                              duration=duration)
