@@ -21,31 +21,41 @@ async def callback_data(bot, update):
     # ****************************************************************
     if chat_id in AUTH_USERS:
         data = update.data
+        print(data)
         # *****************************
         if "_" in data:
             data = data.split("_")[0]
+            print(data)
             if data == "hentai":
                 inline = await hla_buttons()
             elif data == "anime":
                 inline = await ta_buttons()
-            await bot.edit_message_text(chat_id=chat_id,
-                                        message_id=message_id,
-                                        text=f"Ultimos episodios",
-                                        reply_markup=inline)
+            KEY = string.hexdigits
+            RCH = "".join([random.choice(KEY) for i in range(5)])
+            try:
+                await bot.edit_message_text(chat_id=chat_id,
+                                            message_id=message_id,
+                                            text=f"#{RCH}\nUltimos episodios",
+                                            reply_markup=inline)
+            except Exception as e:
+                print(e)
         elif "!" in data:
             await ta_callback(bot, data, tmp_directory)
         elif "|" in data:
             await hla_callback(bot, data, tmp_directory)
         elif "reload" in data:
-            key = string.hexdigits
-            rch = "".join([random.choice(key) for i in range(5)])
             if "hla" in data:
                 inline = await hla_buttons()
             elif "ta" in data:
                 inline = await ta_buttons()
-            await bot.edit_message_text(chat_id=chat_id,
-                                        message_id=message_id,
-                                        text=f"#{rch}\nUltimos episodios",
-                                        reply_markup=inline)
+            KEY = string.hexdigits
+            RCH = "".join([random.choice(KEY) for i in range(5)])
+            try:
+                await bot.edit_message_text(chat_id=chat_id,
+                                            message_id=message_id,
+                                            text=f"#{RCH}\nUltimos episodios",
+                                            reply_markup=inline)
+            except Exception as e:
+                print(e)
     else:
         pass

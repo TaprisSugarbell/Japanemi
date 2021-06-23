@@ -3,7 +3,6 @@ from helper.buttons import *
 from dotenv import load_dotenv
 from pyrogram import Client, filters
 
-
 load_dotenv()
 AUTH_USERS_STR = os.getenv("AUTH_USERS")
 AUTH_USERS = [int(i) for i in AUTH_USERS_STR.split(" ")]
