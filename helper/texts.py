@@ -24,6 +24,7 @@ async def ani_desc(anime_id, mode=1):
     type_ = ""
     genres = ""
     stud = ""
+    tags = ""
     try:
         title = f"**{info.title.romaji}**\n({info.title.native})\n"
     except Exception as e:
@@ -47,14 +48,16 @@ async def ani_desc(anime_id, mode=1):
     except Exception as e:
         print(e)
     try:
+        tags = f"**Tags:** {tr.translate(', '.join(info.tags))}"
+    except Exception as e:
+        print(e)
+    try:
         stud = f"**Estudios:** {', '.join(info.studios)}"
     except Exception as e:
         print(e)
     img = f"<a href='https://img.anili.st/media/{info.id}'>&#8205;</a>"
-    DESCRIPTION = title + descript + type_ + genres + stud + img
-    DESCRIPTION_ = title + type_ + genres + stud + img
-
-
+    DESCRIPTION = title + descript + type_ + genres + tags + stud + img
+    DESCRIPTION_ = title + type_ + genres + tags + stud + img
 
     if mode == 1:
         return DESCRIPTION
