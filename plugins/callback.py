@@ -57,5 +57,10 @@ async def callback_data(bot, update):
                                             reply_markup=inline)
             except Exception as e:
                 print(e)
+        elif "," in data:
+            if "trailer" in data:
+                await trailer(bot, update)
+            else:
+                await ani_callback(bot, update)
     else:
         pass
