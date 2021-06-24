@@ -48,7 +48,7 @@ async def ani_desc(anime_id, mode=1):
     except Exception as e:
         print(e)
     try:
-        tags = f"**Tags:** {tr.translate(', '.join(info.tags))}"
+        tags = f"**Tags:** {tr.translate(', '.join(info.tags))}\n"
     except Exception as e:
         print(e)
     try:
