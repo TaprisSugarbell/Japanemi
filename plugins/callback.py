@@ -59,7 +59,7 @@ async def callback_data(bot, update):
                 print(e)
         elif "," in data:
             if "trailer" in data:
-                await trailer(bot, update)
+                await trailer(bot, update, tmp_directory)
             else:
                 await ani_callback(bot, update)
     else:

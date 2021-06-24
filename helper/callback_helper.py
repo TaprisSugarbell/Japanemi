@@ -126,21 +126,34 @@ async def ani_callback(bot, update):
     print(info)
 
 
-async def trailer(bot, update):
+async def trailer(bot, update, tmp_directory):
     chat_id = update.from_user.id
     message_id = update.message.message_id
     data = int(str(update.data).split(",")[1])
     a = anilist.Client()
     info = a.get_anime(data)
     link = info.trailer.url
-    video_info = youtube_dl.YoutubeDL().extract_info(url=link, download=False)
-    video_title = video_info['title']
-
-    opciones = {
-        'outtmpl': f'{video_title}',
-    }
-    filename = f'{video_title}.mp4'
-    with youtube_dl.YoutubeDL(opciones) as ydl:
-        ydl.download([link])
-    await send_trailer(bot, chat_id, message_id, filename, info)
-    os.unlink(filename)
+    path = await foriter(link, tmp_directory)
+    clip = VideoFileClip(path)
+    duration = int(clip.duration)
+    print(duration)
+    try:
+        list_dir_ = os.listdir(tmp_directory)
+        if "thumb.jpg" in list_dir_:
+            yes_thumb = True
+        else:
+            yes_thumb = False
+    except Exception as e:
+        yes_thumb = False
+        print(e)
+    await send_trailer(bot, chat_id, message_id, info)
+    if yes_thumb:
+        await bot.send_video(chat_id=CHANNEL_ID,
+                             video=path,
+                             thumb=f"{tmp_directory}thumb.jpg",
+                             duration=duration)
+    else:
+        await bot.send_video(chat_id=CHANNEL_ID,
+                             video=path,
+                             duration=duration)
+    rmtree(tmp_directory)

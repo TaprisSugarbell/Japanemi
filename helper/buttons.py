@@ -80,13 +80,9 @@ async def inline_option(chat_type, url, anime_id):
     return inline
 
 
-async def send_trailer(bot, chat_id, message_id, filename, info):
+async def send_trailer(bot, chat_id, message_id, info):
     await bot.edit_message_reply_markup(chat_id=chat_id,
                                         message_id=message_id,
                                         reply_markup=InlineKeyboardMarkup(
                                             [[InlineKeyboardButton("Characters", callback_data="characters"),
                                               InlineKeyboardButton("More Info", url=info.url)]]))
-    await bot.send_video(chat_id=chat_id,
-                         video=filename,
-                         thumb=info.trailer.thumbnail,
-                         reply_to_message_id=message_id)
