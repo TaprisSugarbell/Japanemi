@@ -35,7 +35,7 @@ async def ani_desc(anime_id, mode=1):
             descript = f"{tr.translate(info.description_short, lang_tgt='es').strip()}...\n"
         except Exception as e:
             print(e)
-            descript = f"{tr.translate(info.description, lang_tgt='es')}"
+            descript = f"{tr.translate(info.description, lang_tgt='es')}\n"
     except Exception as e:
         print(e)
     try:
