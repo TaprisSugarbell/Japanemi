@@ -148,12 +148,12 @@ async def trailer(bot, update, tmp_directory):
         print(e)
     await send_trailer(bot, chat_id, message_id, info)
     if yes_thumb:
-        await bot.send_video(chat_id=CHANNEL_ID,
+        await bot.send_video(chat_id=chat_id,
                              video=path,
                              thumb=f"{tmp_directory}thumb.jpg",
                              duration=duration)
     else:
-        await bot.send_video(chat_id=CHANNEL_ID,
+        await bot.send_video(chat_id=chat_id,
                              video=path,
                              duration=duration)
     rmtree(tmp_directory)
