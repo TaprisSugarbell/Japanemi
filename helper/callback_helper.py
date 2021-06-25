@@ -23,8 +23,8 @@ async def ta_callback(bot, data, tmp_directory):
     links = Downcap(actu["episodes"][data]).get_url()
     path = await foriter(links, tmp_directory)
     caption = await capupload_text(title)
+    tt = path.split("/")[-1].split(".")[0]
     try:
-        tt = path.split("/")[-1].split(".")[0]
         list_dir_ = os.listdir(tmp_directory)
         if f"{tt}.jpg" in list_dir_:
             yes_thumb = True
@@ -39,7 +39,7 @@ async def ta_callback(bot, data, tmp_directory):
     if yes_thumb:
         await bot.send_video(chat_id=CHANNEL_ID,
                              video=path,
-                             thumb=f"{tmp_directory}thumb.jpg",
+                             thumb=f"{tmp_directory}{tt}.jpg",
                              caption=caption,
                              duration=duration)
     else:
