@@ -1,4 +1,5 @@
 import os
+import re
 import anilist
 import youtube_dl
 from shutil import rmtree
@@ -23,8 +24,9 @@ async def ta_callback(bot, data, tmp_directory):
     path = await foriter(links, tmp_directory)
     caption = await capupload_text(title)
     try:
+        tt = path.split("/")[-1].split(".")[0]
         list_dir_ = os.listdir(tmp_directory)
-        if "thumb.jpg" in list_dir_:
+        if f"{tt}.jpg" in list_dir_:
             yes_thumb = True
         else:
             yes_thumb = False

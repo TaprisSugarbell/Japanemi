@@ -14,8 +14,10 @@ async def callback_data(bot, update):
     inline = None
     chat_id = update.from_user.id
     message_id = update.message.message_id
+    key = string.hexdigits
+    session_random = "".join([random.choice(key) for i in range(5)])
     # Carpeta
-    tmp_directory = "./Downloads/" + str(update.from_user.id) + "/"
+    tmp_directory = "./Downloads/" + str(update.from_user.id) + "/" + session_random + "/"
     if not os.path.isdir(tmp_directory):
         os.makedirs(tmp_directory)
     # ****************************************************************
