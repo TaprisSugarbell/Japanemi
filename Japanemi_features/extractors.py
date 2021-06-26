@@ -111,7 +111,15 @@ async def zippyshare(url, out="./", custom=""):
             filter_eq = str(a).split("href =")[1].split(";")[0]
             separate_filter = filter_eq.split("+")
     nums_ = " ".join(separate_filter[1:3]).split("%")
-    separate_nums = nums_[1].strip().split(" ")
+    try:
+        separate_nums = nums_[1].strip().split(" ")
+    except IndexError:
+        etto = soup.find_all("script")
+        a = etto[-7]
+        filter_eq = str(a).split("href =")[1].split(";")[0]
+        separate_filter = filter_eq.split("+")
+        nums_ = " ".join(separate_filter[1:3]).split("%")
+        separate_nums = nums_[1].strip().split(" ")
     num_1 = int(separate_nums[3])
     num_2 = int(separate_nums[0])
     formuled = num_1 % num_2 + num_1 % 913
