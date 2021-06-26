@@ -44,7 +44,9 @@ async def ani_desc(anime_id, mode=1):
         except Exception as e:
             print(e)
             tf = f"{tr.translate(info.description, lang_tgt='es').strip()}"
-            tr_ = md(tf, strip=['br']).replace('*', '__')
+            if tf[-2:] == " .":
+                tf = f"{tf[-2:]}."
+            tr_ = md(tf, strip=['br']).replace('*', '__').replace("____", "**")
         descript = f"**Descripción:** {' '.join(tr_.split())}"
         print(descript)
     except Exception as e:
@@ -75,8 +77,17 @@ async def ani_desc(anime_id, mode=1):
             arm_ = f'**{fecha_.day}/{fecha_.month}/{fecha_.year}**'
         except Exception as e:
             print(e)
-            fecha = info.start_date
-            arm = f'**{fecha.day}/{fecha.month}/{fecha.year}**'
+            try:
+                fecha = info.start_date
+                arm = f'**{fecha.day}/{fecha.month}/{fecha.year}**'
+            except Exception as e:
+                print(e)
+                fecha = info.start_date
+                try:
+                    arm = f"**~/~/{fecha.year}?**"
+                except Exception as e:
+                    print(e)
+                    arm = "**~/~/~?**"
             arm_ = "**~/~/~?**"
         ini = f"**Emsión:** __De__ {arm} __hasta__ {arm_}\n"
         exg = [f'#{"_".join(re.sub(r"[^a-zA-Z0-9_ ]","", info.genres[i]).strip().split(" "))}'
