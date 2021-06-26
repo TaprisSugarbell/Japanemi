@@ -62,7 +62,7 @@ async def generic_extractor(url, out="./", custom=""):
     file_type = file_data["type"]
     # Si es video trata de obtener capturas
     if file_type == "video":
-        await generate_screen_shots(out_, out + _title, 300, 1)
+        await generate_screen_shots(out_, out, 300, 1)
         yes_thumb = True
     else:
         yes_thumb = False

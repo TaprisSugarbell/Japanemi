@@ -26,7 +26,7 @@ async def ta_callback(bot, data, tmp_directory):
     tt = path.split("/")[-1].split(".")[0]
     try:
         list_dir_ = os.listdir(tmp_directory)
-        if f"{tt}.jpg" in list_dir_:
+        if "thumb.jpg" in list_dir_:
             yes_thumb = True
         else:
             yes_thumb = False
@@ -39,7 +39,7 @@ async def ta_callback(bot, data, tmp_directory):
     if yes_thumb:
         await bot.send_video(chat_id=CHANNEL_ID,
                              video=path,
-                             thumb=f"{tmp_directory}{tt}.jpg",
+                             thumb=f"{tmp_directory}thumb.jpg",
                              caption=caption,
                              duration=duration)
     else:

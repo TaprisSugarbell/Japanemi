@@ -46,11 +46,8 @@ async def place_water_mark(input_file, output_file, water_mark_file):
 
 
 async def take_screen_shot(video_file, output_directory, ttl):
-    if output_directory[-1] == "/":
-        out_put_file_name = output_directory + \
+    out_put_file_name = output_directory + \
                             "/" + str("thumb") + ".jpg"
-    else:
-        out_put_file_name = output_directory + ".jpg"
     # out_put_file_name = output_directory + \
     #                     "/" + str(time.time()) + ".jpg"
     file_genertor_command = [
