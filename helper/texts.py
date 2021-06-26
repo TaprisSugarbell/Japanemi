@@ -115,7 +115,7 @@ async def ani_desc(anime_id, mode=1):
         print(e)
     try:
         find_ = "_".join(re.sub(r"[^a-zA-Z0-9_ ]", "", info.title.romaji).strip().split(" "))
-        find = f"**Find:** {find_} {info.hashtag}\n".strip()
+        find = f"**Find:** #{find_} {info.hashtag}\n".strip()
     except Exception as e:
         print(e)
     img = f"<a href='https://img.anili.st/media/{info.id}'>&#8205;</a>"
