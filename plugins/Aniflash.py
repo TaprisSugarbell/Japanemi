@@ -14,12 +14,12 @@ AUTH_USERS = [int(i) for i in AUTH_USERS_STR.split(" ")]
 
 
 async def reader(file):
-    file = file.split("/")[-1]
     links = []
-    title = file.split(".")[0]
     with open(file, "r") as r:
         for line in r.readlines():
             links.append(line.strip())
+    file = file.split("/")[-1]
+    title = file.split(".")[0]
     return {"links": links,
             "title": title}
 
