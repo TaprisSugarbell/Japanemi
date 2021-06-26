@@ -37,13 +37,15 @@ async def ani_desc(anime_id, mode=1):
         title = f"**{info.title.romaji}**\n"
     try:
         try:
-            tr = f"{tr.translate(info.description_short, lang_tgt='es')}..."
+            tf = f"{tr.translate(info.description_short, lang_tgt='es').strip()}"
+            if tf[-1] == ".":
+                tf = f"{tf[:-1]}..."
+            tr_ = md(tf, strip=['br']).replace('*', '__')
         except Exception as e:
             print(e)
-            tr = f"{tr.translate(info.description, lang_tgt='es')}"
-        print(tr)
-        tr = md(tr, strip=['br']).replace('*', '__')
-        descript = f"**Descripción:** {' '.join(tr.split())}"
+            tf = f"{tr.translate(info.description, lang_tgt='es').strip()}"
+            tr_ = md(tf, strip=['br']).replace('*', '__')
+        descript = f"**Descripción:** {' '.join(tr_.split())}"
         print(descript)
     except Exception as e:
         print(e)
