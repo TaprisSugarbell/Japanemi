@@ -48,6 +48,8 @@ async def generic_extractor(url, out="./", custom=""):
         _ext = video_info["ext"]
     except KeyError:
         _ext = video_info["entries"][0]["formats"][0]["ext"]
+    if _ext == "unknown_video":
+        _ext = "mp4"
     if _title.split(".")[-1] in videos:
         _title = _title.split(".")[0]
     # Options + Download
