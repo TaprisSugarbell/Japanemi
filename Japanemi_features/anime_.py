@@ -254,7 +254,7 @@ class InfoAnime:
 async def download_file(urli, out="./", custom=""):
     host = urllib.request.Request(urli).host
     host2 = ".".join(host.split(".")[1:])
-    if host == "www.mediafire.com":
+    if host == "www.mediafire.com" or host == "mediafire.com":
         dwn = await mediafire(urli, out, custom)
     elif host == "mega.nz":
         pass
