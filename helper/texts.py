@@ -40,7 +40,7 @@ async def ani_desc(anime_id, mode=1):
             tf = f"{tr.translate(info.description_short, lang_tgt='es').strip()}"
             if tf[-1] == ".":
                 tf = f"{tf[:-1]}..."
-            tr_ = md(tf, strip=['br']).replace('*', '__')
+            tr_ = md(tf, strip=['br']).replace('*', '__').replace("____", "**")
         except Exception as e:
             print(e)
             tf = f"{tr.translate(info.description, lang_tgt='es').strip()}"
