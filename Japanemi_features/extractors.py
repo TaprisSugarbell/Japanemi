@@ -1,6 +1,7 @@
 import wget
 import requests
 import youtube_dl
+import urllib.parse
 from PIL import Image
 from bs4 import BeautifulSoup
 from Japanemi_features.utils import *
@@ -124,7 +125,8 @@ async def zippyshare(url, out="./", custom=""):
     num_2 = int(separate_nums[0])
     formuled = num_1 % num_2 + num_1 % 913
     protocol_ = url.split(".")[0]
-    fname = separate_filter[-1].replace('"', "").replace("/", "").strip()
+    fname = urllib.parse.unquote_plus(
+        separate_filter[-1].replace('"', "").replace("/", "").strip())
     # Link generado
     _link = f"{protocol_}.zippyshare.com/d/" \
             f"{separate_filter[0].split('/')[2]}/{formuled}/{fname}"
