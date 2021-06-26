@@ -19,3 +19,4 @@ google-trans-new
 python-anilist
 python-ffmpeg
 ffmpeg~=1.4
+wget
