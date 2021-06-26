@@ -45,10 +45,18 @@ async def flash(bot, update):
         clip = VideoFileClip(filename)
         duration = int(clip.duration)
         print(duration)
-        await bot.send_video(chat_id=chat_id,
-                             video=filename,
-                             caption=caption,
-                             duration=duration)
+        try:
+            await bot.send_video(chat_id=chat_id,
+                                 video=filename,
+                                 thumb=tmp_directory + "thumb.jpg",
+                                 caption=caption,
+                                 duration=duration)
+        except Exception as e:
+            print(e)
+            await bot.send_video(chat_id=chat_id,
+                                 video=filename,
+                                 caption=caption,
+                                 duration=duration)
         rmtree(tmp_directory)
     else:
         pass
