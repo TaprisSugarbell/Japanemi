@@ -17,3 +17,4 @@ youtube_dl
 moviepy
 google-trans-new
 python-anilist
+python-ffmpeg
