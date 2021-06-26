@@ -1,5 +1,6 @@
 import re
 import anilist
+from markdownify import markdownify as md
 from google_trans_new import google_translator
 
 
@@ -24,6 +25,8 @@ async def ani_desc(anime_id, mode=1):
     title = ""
     descript = ""
     type_ = ""
+    episodes = ""
+    ini = ""
     genres = ""
     stud = ""
     tags = ""
@@ -34,32 +37,66 @@ async def ani_desc(anime_id, mode=1):
         title = f"**{info.title.romaji}**\n"
     try:
         try:
-            descript = f"{tr.translate(info.description_short, lang_tgt='es').strip()}...\n"
+            tr = f"{tr.translate(info.description_short, lang_tgt='es')}..."
         except Exception as e:
             print(e)
-            descript = f"{tr.translate(info.description, lang_tgt='es')}\n"
+            tr = f"{tr.translate(info.description, lang_tgt='es')}"
+        print(tr)
+        tr = md(tr, strip=['br']).replace('*', '__')
+        descript = f"**Descripción:** {' '.join(tr.split())}"
+        print(descript)
     except Exception as e:
         print(e)
     try:
+        state = info.status
+        if state == "RELEASING":
+            state = "Emisión"
+        elif state == "FINISHED":
+            state = "Finalizado"
+        elif state == "NOT_YET_RELEASED":
+            state = "Aún no emitido"
+        elif state == "CANCELLED":
+            state = "Cancelado"
         type_ = f"**Tipo:** {info.format}\n" \
-                f"**Estado:** {tr.translate(info.status, lang_tgt='es')[0]}\n"
+                f"**Estado:** {state}\n"
+        episodes = f"**Episodios:** {info.episodes}"
     except Exception as e:
         print(e)
     try:
-        genres = f"**Géneros:** {tr.translate(', '.join(info.genres), lang_tgt='es')}\n"
+        try:
+            fecha = info.start_date
+            arm = f'**{fecha.day}/{fecha.month}/{fecha.year}**'
+            fecha_ = info.end_date
+            arm_ = f'**{fecha_.day}/{fecha_.month}/{fecha_.year}**'
+        except Exception as e:
+            print(e)
+            fecha = info.start_date
+            arm = f'**{fecha.day}/{fecha.month}/{fecha.year}**'
+            arm_ = "**~/~/~?**"
+        ini = f"**Emsión:** __De__ {arm} __hasta__ {arm_}\n"
+        exg = [f'#{"_".join(re.sub(r"[^a-zA-Z0-9_ ]","", info.genres[i]).strip().split(" "))}'
+              for i in range(len(info.genres))]
+        arm_g = ', '.join(exg)
+        genres = f"**Géneros:** {arm_g}.\n"
     except Exception as e:
         print(e)
     try:
-        tags = f"**Tags:** {tr.translate(', '.join(info.tags))}\n"
+        ob = [f'#{"_".join(re.sub(r"[^a-zA-Z0-9_ ]","", info.tags[i]).strip().split(" "))}'
+              for i in range(len(info.tags))]
+        arm_t = ', '.join(ob)
+        tags = f"**Tags:** {arm_t}.\n"
     except Exception as e:
         print(e)
     try:
-        stud = f"**Estudios:** {', '.join(info.studios)}"
+        exs = [f'#{"_".join(re.sub(r"[^a-zA-Z0-9_ ]", "", info.studios[i]).strip().split(" "))}'
+               for i in range(len(info.studios))]
+        arm_s = ', '.join(exs)
+        stud = f"**Estudios:** {arm_s}.\n"
     except Exception as e:
         print(e)
     img = f"<a href='https://img.anili.st/media/{info.id}'>&#8205;</a>"
-    DESCRIPTION = title + descript + type_ + genres + tags + stud + img
-    DESCRIPTION_ = title + type_ + genres + tags + stud + img
+    DESCRIPTION = title + type_ + episodes + ini + genres + tags + stud + descript + img
+    DESCRIPTION_ = title + type_ + episodes + ini + genres + tags + stud + img
 
     if mode == 1:
         return DESCRIPTION
