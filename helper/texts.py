@@ -31,7 +31,7 @@ async def ani_desc(anime_id, mode=1):
     stud = ""
     tags = ""
     try:
-        title = f"**{info.title.romaji}**\n({info.title.native})\n"
+        title = f"**{info.title.romaji}**\n(**{info.title.native}**)\n"
     except Exception as e:
         print(e)
         title = f"**{info.title.romaji}**\n"
