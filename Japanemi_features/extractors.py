@@ -73,8 +73,8 @@ async def generic_extractor(url, out="./", custom=""):
             "thumb": yes_thumb}
 
 
-async def mediafire(url, out, custom=""):
-    r = requests.get(url)
+async def mediafire(url, out="./", custom=""):
+    r = requests.get(url, allow_redirects=True)
     soup = BeautifulSoup(r.content, 'html.parser')
     dwnld = soup.find(id='downloadButton')
     w = dwnld.get('href')
