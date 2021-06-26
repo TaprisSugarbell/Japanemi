@@ -25,7 +25,7 @@ async def ani_desc(anime_id, mode=1):
     title = ""
     descript = ""
     type_ = ""
-    episodes = ""
+    episodes = f"**Episodios:** **~?**\n"
     ini = ""
     genres = ""
     stud = ""
@@ -61,7 +61,10 @@ async def ani_desc(anime_id, mode=1):
             state = "Cancelado"
         type_ = f"**Tipo:** {info.format}\n" \
                 f"**Estado:** {state}\n"
-        episodes = f"**Episodios:** {info.episodes}"
+        try:
+            episodes = f"**Episodios:** {info.episodes}\n"
+        except Exception as e:
+            print(e)
     except Exception as e:
         print(e)
     try:
