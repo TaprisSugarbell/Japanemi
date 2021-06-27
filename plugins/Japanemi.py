@@ -20,8 +20,8 @@ async def anime(bot, update):
 
 @Client.on_message(filters.command(["on"]))
 async def load(bot, update):
-    chat_id = update.chat.id
-    if chat_id in AUTH_USERS:
+    user = update.from_user.id
+    if user in AUTH_USERS:
         await anime(bot, update)
     else:
         pass

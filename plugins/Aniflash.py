@@ -27,8 +27,9 @@ async def reader(file):
 
 @Client.on_message(filterx.command(["flash"]))
 async def flash(bot, update):
+    user = update.from_user.id
     chat_id = update.chat.id
-    if chat_id in AUTH_USERS:
+    if user in AUTH_USERS:
         file_id = update.reply_to_message.document.file_id
         file_name = update.reply_to_message.document.file_name
         key = string.hexdigits

@@ -12,16 +12,17 @@ AUTH_USERS = [int(i) for i in AUTH_USERS_STR.split(" ")]
 @Client.on_callback_query()
 async def callback_data(bot, update):
     inline = None
-    chat_id = update.from_user.id
+    user = update.from_user.id
+    chat_id = update.chat.id
     message_id = update.message.message_id
     key = string.hexdigits
     session_random = "".join([random.choice(key) for i in range(5)])
     # Carpeta
-    tmp_directory = "./Downloads/" + str(update.from_user.id) + "/" + session_random + "/"
+    tmp_directory = "./Downloads/" + str(user) + "/" + session_random + "/"
     if not os.path.isdir(tmp_directory):
         os.makedirs(tmp_directory)
     # ****************************************************************
-    if chat_id in AUTH_USERS:
+    if user in AUTH_USERS:
         data = update.data
         print(data)
         # *****************************
