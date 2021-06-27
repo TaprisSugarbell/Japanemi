@@ -29,6 +29,7 @@ async def ani_desc(anime_id, mode=1):
     ini = ""
     genres = ""
     tags = ""
+    hashtag = ""
     stud = ""
     find = ""
     try:
@@ -114,8 +115,12 @@ async def ani_desc(anime_id, mode=1):
     except Exception as e:
         print(e)
     try:
+        hashtag = info.hashtag
+    except Exception as e:
+        print(e)
+    try:
         find_ = "_".join(re.sub(r"[^a-zA-Z0-9_ ]", "", info.title.romaji).strip().split(" "))
-        find = f"**Find:** #{find_} {info.hashtag}".strip()
+        find = f"**Find:** #{find_} {hashtag}".strip()
     except Exception as e:
         print(e)
     img = f"<a href='https://img.anili.st/media/{info.id}'>&#8205;</a>"
