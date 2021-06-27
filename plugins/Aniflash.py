@@ -44,6 +44,9 @@ async def flash(bot, update):
         filename = await foriter(dats["links"], tmp_directory)
         caption = await capupload_text(dats["title"])
         clip = VideoFileClip(filename)
+        size = clip.size
+        height = size[1]
+        width = size[0]
         duration = int(clip.duration)
         print(duration)
         try:
@@ -51,13 +54,17 @@ async def flash(bot, update):
                                  video=filename,
                                  thumb=tmp_directory + "thumb.jpg",
                                  caption=caption,
-                                 duration=duration)
+                                 duration=duration,
+                                 height=height,
+                                 width=width)
         except Exception as e:
             print(e)
             await bot.send_video(chat_id=chat_id,
                                  video=filename,
                                  caption=caption,
-                                 duration=duration)
+                                 duration=duration,
+                                 height=height,
+                                 width=width)
         rmtree(tmp_directory)
     else:
         pass
