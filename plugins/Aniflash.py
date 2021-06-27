@@ -2,11 +2,12 @@ import os
 import random
 import string
 from shutil import rmtree
+from helper import filterx
+from pyrogram import Client
 from dotenv import load_dotenv
-from pyrogram import Client, filters
+from helper.texts import capupload_text
 from moviepy.editor import VideoFileClip
 from Japanemi_features.anime_ import foriter
-from helper.texts import capupload_text, ani_desc
 
 load_dotenv()
 AUTH_USERS_STR = os.getenv("AUTH_USERS")
@@ -24,7 +25,7 @@ async def reader(file):
             "title": title}
 
 
-@Client.on_message(filters.command(["flash"]))
+@Client.on_message(filterx.command(["flash"]))
 async def flash(bot, update):
     chat_id = update.chat.id
     if chat_id in AUTH_USERS:
