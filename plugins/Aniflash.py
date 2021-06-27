@@ -49,7 +49,7 @@ async def flash(bot, update):
         width = size[0]
         duration = int(clip.duration)
         print(duration)
-        print(tmp_directory)
+        print(os.listdir(tmp_directory))
         try:
             await bot.send_video(chat_id=chat_id,
                                  video=filename,
