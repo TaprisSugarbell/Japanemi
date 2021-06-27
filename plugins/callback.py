@@ -11,7 +11,6 @@ AUTH_USERS = [int(i) for i in AUTH_USERS_STR.split(" ")]
 
 @Client.on_callback_query()
 async def callback_data(bot, update):
-    print(update)
     inline = None
     user = update.from_user.id
     chat_id = update.message.chat.id
