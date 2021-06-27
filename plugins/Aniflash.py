@@ -3,8 +3,8 @@ import random
 import string
 from shutil import rmtree
 from helper import filterx
-from pyrogram import Client
 from dotenv import load_dotenv
+from pyrogram import Client, filters
 from helper.texts import capupload_text
 from moviepy.editor import VideoFileClip
 from Japanemi_features.anime_ import foriter
@@ -25,13 +25,16 @@ async def reader(file):
             "title": title}
 
 
-@Client.on_message(filterx.command(["flash"]))
+@Client.on_message(filters.document)
 async def flash(bot, update):
+    print(update)
     user = update.from_user.id
     chat_id = update.chat.id
     if user in AUTH_USERS:
-        file_id = update.reply_to_message.document.file_id
-        file_name = update.reply_to_message.document.file_name
+        # file_id = update.reply_to_message.document.file_id
+        file_id = update.document.file_id
+        # file_name = update.reply_to_message.document.file_name
+        file_name = update.document.file_name
         key = string.hexdigits
         session_random = "".join([random.choice(key) for i in range(5)])
         # Carpeta
