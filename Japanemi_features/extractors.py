@@ -83,7 +83,6 @@ async def mediafire(url, out="./", custom=""):
     wget.download(w, out)
     # Esto revisa los archivos
     file_direct = os.listdir(out)
-    print(file_direct)
     filename = out + file_direct[0]
     # Obtiene el tipo de archivo
     file_data = await file_recognize(filename, out)
@@ -136,7 +135,6 @@ async def zippyshare(url, out="./", custom=""):
         ydl.download([_link])
     # Esto revisa los archivos
     file_direct = os.listdir(out)
-    print(file_direct)
     filename = out + file_direct[0]
     # Obtiene el tipo de archivo
     file_data = await file_recognize(filename, out)
