@@ -52,7 +52,7 @@ async def ani_desc(anime_id, mode=1):
                 tf = f"{tf[-2:]}."
             tr_ = md(tf, strip=['br']).replace('*', '__').replace("____", "**")
         mm = f"**Descripción:** {' '.join(tr_.split())}"
-        descript = re.sub(r"\(Fuente: [a-zA-Z0-9 ]{0,1000}\)", "", mm)
+        descript = re.sub(r"\(Fuente: [\s\S]{0,1000}\)", "", mm)
         print(descript)
     except Exception as e:
         print(e)
