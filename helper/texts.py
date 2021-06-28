@@ -5,9 +5,9 @@ from google_trans_new import google_translator
 
 
 async def capupload_text(title):
-    titl = re.sub(r"[^a-zA-Z0-9_ ]", "", title).strip()
+    titl = re.sub(r"[^a-zA-Z0-9_ .-]", "", title).strip()
     cap = "".join(titl.split(" ")[-1])
-    twc = "_".join(titl.strip().split(" ")[:-1])
+    twc = "_".join(titl.strip().split(" ")[:-1]).replace(".", "")
     if twc[-1] == "_":
         twc = twc[:-1]
     twg = " ".join(title.split(" ")[:-1])
