@@ -20,7 +20,7 @@ async def reader(file):
         for line in r.readlines():
             links.append(line.strip())
     file = file.split("/")[-1]
-    title = file.split(".")[0]
+    title = ".".join(file.split(".")[0:-1])
     return {"links": links,
             "title": title}
 
