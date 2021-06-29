@@ -31,6 +31,9 @@ async def file_recognize(filename, out="./"):
     except:
         file_type = None
         ext = None
+        if ext is None:
+            file_type = "video"
+            ext = "mp4"
     return {
         "file": filename,
         "type": file_type,
