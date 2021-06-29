@@ -17,7 +17,8 @@ async def flash(bot, update):
     if user in AUTH_USERS:
         if "rm" in dt:
             drm = "".join(dt.split("|")[-1])
-            ld = os.listdir(f"./Downloads/{drm}")
+            rmtree(f"./Downloads/{drm}")
+            dt = ""
         try:
             ld = os.listdir(f"./Downloads/{dt}")
         except Exception as e:
