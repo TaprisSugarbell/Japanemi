@@ -32,6 +32,7 @@ async def file_recognize(filename, out="./"):
         file_type = None
         ext = None
         if ext is None:
+            os.rename(filename, filename + ".mp4")
             file_type = "video"
             ext = "mp4"
     return {
