@@ -84,10 +84,28 @@ async def mediafire(url, out="./", custom=""):
     w = dwnld.get('href')
     # if len(custom) > 0:
     #     custom = "/" + custom
-    wget.download(w, out)
-    # Esto revisa los archivos
-    file_direct = os.listdir(out)
-    filename = out + file_direct[0]
+    video_info = youtube_dl.YoutubeDL().extract_info(w, download=False)
+    videos = ["mp4", "mkv", "webm"]
+    # Demás datos, title, ext
+    if len(custom) > 0:
+        _title = custom
+    else:
+        _title = video_info["title"]
+    try:
+        _ext = video_info["ext"]
+    except KeyError:
+        _ext = video_info["entries"][0]["formats"][0]["ext"]
+    if _ext == "unknown_video":
+        _ext = "mp4"
+    if _title.split(".")[-1] in videos:
+        _title = _title.split(".")[0]
+    # Options + Download
+    options = {"format": "bestaudio+bestvideo/best",
+               "outtmpl": out + _title + "." + _ext}
+    with youtube_dl.YoutubeDL(options) as ydl:
+        ydl.download([w])
+    # Filename
+    filename = out + _title + "." + _ext
     # Obtiene el tipo de archivo
     file_data = await file_recognize(filename, out)
     file_type = file_data["type"]
