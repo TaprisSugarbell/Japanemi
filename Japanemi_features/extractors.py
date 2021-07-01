@@ -168,7 +168,7 @@ async def zippyshare(url, out="./", custom=""):
     # Obtiene el tipo de archivo
     file_data = await file_recognize(filename, out)
     file_type = file_data["type"]
-    logging.info("[Zyppy-extractor] - file_data", file_data)
+    logging.info(f"[Zyppy-extractor] - file_data - {file_data}")
     # Si es video trata de obtener capturas
     if file_type == "video":
         await generate_screen_shots(filename, out, 300, 1)
