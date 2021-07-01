@@ -1,3 +1,4 @@
+import re
 import wget
 import logging
 import requests
@@ -143,8 +144,9 @@ async def zippyshare(url, out="./", custom=""):
         separate_nums = nums_[1].strip().split(" ")
     except IndexError:
         etto = soup.find_all("script")
-        a = etto[-7]
-        filter_eq = str(a).split("href =")[1].split(";")[0]
+        b = etto[-7]
+        c = re.findall(r'"[\s\S]{0,1000}?[\S]{0,1000}";', str(b.string))
+        filter_eq = c[0][:-1]
         separate_filter = filter_eq.split("+")
         nums_ = " ".join(separate_filter[1:3]).split("%")
         separate_nums = nums_[1].strip().split(" ")
@@ -171,8 +173,10 @@ async def zippyshare(url, out="./", custom=""):
     logging.info(f"[Zyppy-extractor] - file_data - {file_data}")
     # Si es video trata de obtener capturas
     if file_type == "video":
+        logging.info("Generando thumbnail")
         await generate_screen_shots(filename, out, 300, 1)
         yes_thumb = True
+        logging.info("Se genero...")
     else:
         yes_thumb = False
     return {"file": filename,
