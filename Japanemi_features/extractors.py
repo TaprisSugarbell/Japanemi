@@ -1,10 +1,17 @@
 import wget
+import logging
 import requests
 import youtube_dl
 import urllib.parse
 from PIL import Image
 from bs4 import BeautifulSoup
 from Japanemi_features.utils import *
+
+# DEBUG
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
 async def file_recognize(filename, out="./"):
@@ -19,7 +26,6 @@ async def file_recognize(filename, out="./"):
         "document": documents}
     try:
         ext = filename.split(".")[-1]
-        print(ext)
         if ext in direcs["image"]:
             file_type = "image"
         elif ext in direcs["video"]:
@@ -162,6 +168,7 @@ async def zippyshare(url, out="./", custom=""):
     # Obtiene el tipo de archivo
     file_data = await file_recognize(filename, out)
     file_type = file_data["type"]
+    logging.info("[Zyppy-extractor] - file_data", file_data)
     # Si es video trata de obtener capturas
     if file_type == "video":
         await generate_screen_shots(filename, out, 300, 1)
