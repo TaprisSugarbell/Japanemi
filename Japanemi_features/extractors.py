@@ -148,9 +148,10 @@ async def zippyshare(url, out="./", custom=""):
     protocol_ = url.split(".")[0]
     fname = urllib.parse.unquote_plus(
         separate_filter[-1].replace('"', "").replace("/", "").strip())
+    cname = separate_filter[-1].replace('"', "").replace("/", "").strip()
     # Link generado
     _link = f"{protocol_}.zippyshare.com/d/" \
-            f"{separate_filter[0].split('/')[2]}/{formuled}/{fname}"
+            f"{separate_filter[0].split('/')[2]}/{formuled}/{cname}"
     options = {"format": "best/bestaudio+bestvideo",
                "outtmpl": out + fname}
     with youtube_dl.YoutubeDL(options) as ydl:
