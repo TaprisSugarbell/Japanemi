@@ -13,7 +13,16 @@ async def capupload_text(title):
             twc = twc[:-1]
     except Exception as e:
         print(e)
-    twg = " ".join(title.split(" ")[:-1])
+    try:
+        etto = title.split("_")
+        if len(etto) > 3:
+            twg = " ".join(etto[:-1])
+            cap = " ".join(etto[-1])
+        else:
+            twg = " ".join(title.split(" ")[:-1])
+    except Exception as e:
+        print(e)
+        twg = " ".join(title.split(" ")[:-1])
     caption = \
         f"#{twc}\n" \
         f"💮 {twg}\n" \
