@@ -31,6 +31,7 @@ async def flash(bot, update):
     user = update.from_user.id
     chat_id = update.chat.id
     if user in AUTH_USERS:
+        caption_ = update.caption
         # file_id = update.reply_to_message.document.file_id
         file_id = update.document.file_id
         # file_name = update.reply_to_message.document.file_name
@@ -45,7 +46,10 @@ async def flash(bot, update):
         dats = await reader(file)
         os.unlink(file)
         filename = await foriter(dats["links"], tmp_directory)
-        caption = await capupload_text(dats["title"])
+        if caption_ is None:
+            caption = await capupload_text(dats["title"])
+        else:
+            caption = await capupload_text(caption_)
         clip = VideoFileClip(filename)
         size = clip.size
         height = size[1]
