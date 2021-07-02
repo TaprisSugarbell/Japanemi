@@ -8,8 +8,11 @@ async def capupload_text(title):
     titl = re.sub(r"[^a-zA-Z0-9_ .-]", "", title).strip()
     cap = "".join(titl.split(" ")[-1])
     twc = "_".join(titl.strip().split(" ")[:-1]).replace(".", "").replace("-", "_")
-    if twc[-1] == "_":
-        twc = twc[:-1]
+    try:
+        if twc[-1] == "_":
+            twc = twc[:-1]
+    except Exception as e:
+        print(e)
     twg = " ".join(title.split(" ")[:-1])
     caption = \
         f"#{twc}\n" \
