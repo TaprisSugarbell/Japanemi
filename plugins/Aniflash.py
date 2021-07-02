@@ -27,6 +27,7 @@ async def reader(file):
 
 @Client.on_message(filters.document)
 async def flash(bot, update):
+    print(update)
     user = update.from_user.id
     chat_id = update.chat.id
     if user in AUTH_USERS:
