@@ -139,8 +139,7 @@ async def __anime__(bot, update):
                 )
         await bot.answer_inline_query(inlineQueryId,
                                       results,
-                                      next_offset=f"{offset + 1}",
-                                      cache_time=1)
+                                      next_offset=f"{offset + 1}")
     else:
         for anime in animes["results"]:
             thumb = arm_link(anime, 1)
@@ -162,5 +161,4 @@ async def __anime__(bot, update):
                 )
             )
         await bot.answer_inline_query(inlineQueryId,
-                                      results,
-                                      cache_time=1)
+                                      results)
