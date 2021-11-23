@@ -32,11 +32,11 @@ async def callback_data(bot, update):
     try:
         inline = None
         user = update.from_user.id
-        if hasattr(update, "message"):
+        try:
             chat_id = update.message.chat.id
             message_id = update.message.message_id
             data = update.data
-        else:
+        except AttributeError:
             data = update.data + "$"
             chat_id = None
             message_id = update.inline_message_id
