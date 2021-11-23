@@ -53,7 +53,7 @@ async def __ani__(bot, update):
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
-                            InlineKeyboardButton("Información", f"info_{anime.id}")
+                            InlineKeyboardButton("Información", f"{anime.id}-")
                         ]
                     ]
                 )
