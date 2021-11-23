@@ -131,7 +131,7 @@ async def __anime__(bot, update):
                             [
                                 [
                                     InlineKeyboardButton("Lista de episodios", f'anime_1_{anime["anime_id"]}'),
-                                    InlineKeyboardButton("Obtener links", f'cap_1_{anime["id"]}')
+                                    InlineKeyboardButton("Subir capítulo", f'{anime["id"]}!')
                                 ]
                             ]
                         )
