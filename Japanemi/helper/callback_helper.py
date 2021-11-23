@@ -33,16 +33,23 @@ async def af_callback(bot, data, tmp_directory):
         yes_thumb = False
         print(e)
     clip = VideoFileClip(path)
+    size = clip.size
+    height = size[1]
+    width = size[0]
     duration = int(clip.duration)
     print(duration)
     if yes_thumb:
         await bot.send_video(chat_id=CHANNEL_ID,
+                             width=width,
+                             height=height,
                              video=path,
                              thumb=f"{tmp_directory}thumb.jpg",
                              caption=caption,
                              duration=duration)
     else:
         await bot.send_video(chat_id=CHANNEL_ID,
+                             width=width,
+                             height=height,
                              video=path,
                              caption=caption,
                              duration=duration)
