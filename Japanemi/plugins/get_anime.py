@@ -32,9 +32,9 @@ def xname(x: str):
         return "OVA " + nn
     else:
         if len(mtch) > 2:
-            return "Capítulo" + mtch[-2]
+            return "Capítulo " + mtch[-2]
         else:
-            return "Capítulo" + mtch[-1]
+            return "Capítulo " + mtch[-1]
 
 
 @Client.on_callback_query(filters.regex(r"anime_"))
