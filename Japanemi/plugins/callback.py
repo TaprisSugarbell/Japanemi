@@ -32,8 +32,14 @@ async def callback_data(bot, update):
     try:
         inline = None
         user = update.from_user.id
-        chat_id = update.message.chat.id
-        message_id = update.message.message_id
+        if hasattr(update, "message"):
+            chat_id = update.message.chat.id
+            message_id = update.message.message_id
+            data = update.data
+        else:
+            data = update.data + "$"
+            chat_id = None
+            message_id = update.inline_message_id
         key = string.hexdigits
         session_random = "".join([random.choice(key) for i in range(5)])
         # Carpeta
@@ -42,7 +48,7 @@ async def callback_data(bot, update):
             os.makedirs(tmp_directory)
         # ****************************************************************
         if user in AUTH_USERS:
-            data = update.data
+            # data = update.data
             print(data)
             # *****************************
             if "_" in data:
@@ -62,7 +68,7 @@ async def callback_data(bot, update):
                 except Exception as e:
                     print(e)
             elif "!" in data:
-                await af_callback(bot, data, tmp_directory)
+                await af_callback(bot, data, update, tmp_directory)
             elif "|" in data:
                 await hla_callback(bot, data, tmp_directory)
             elif "reload" in data:

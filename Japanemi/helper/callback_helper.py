@@ -15,7 +15,9 @@ CHANNEL_ID = config("CHANNEL_ID", default=None, cast=int)
 CHANNEL_H = config("CHANNEL_IDH", default=None, cast=int)
 
 
-async def af_callback(bot, data, tmp_directory):
+async def af_callback(bot, data, update, tmp_directory):
+    if "$" in data:
+        CHANNEL_ID: int = update.from_user.id
     data = int(data.split("!")[0])
     aa = AnimeFlash(episode=data)
     episode = aa.episodes()
