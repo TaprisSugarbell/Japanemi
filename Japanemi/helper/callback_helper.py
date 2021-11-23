@@ -170,6 +170,30 @@ async def ani_callback(bot, update):
     print(info)
 
 
+async def Ani_callback(bot, update):
+    # Variables y llamadas
+    tr = google_translator()
+    chat_id = update.from_user.id
+    inline_message_id = update.inline_message_id
+    data = update.data
+
+    anime = int(data[:-1])
+    a = anilist.Client()
+    info = a.get_anime(anime)
+    inline = await inline_option("private", info.url, anime)
+    try:
+        descript = await ani_desc(anime)
+        await bot.edit_inline_text(inline_message_id,
+                                   text=descript)
+    except Exception as e:
+        print(e)
+        descript = await ani_desc(anime, mode=2)
+        await bot.edit_inline_text(inline_message_id,
+                                   text=descript,
+                                   reply_markup=inline)
+    print(info)
+
+
 async def trailer(bot, update, tmp_directory):
     chat_id = update.from_user.id
     message_id = update.message.message_id

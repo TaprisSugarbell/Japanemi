@@ -73,5 +73,8 @@ async def callback_data(bot, update):
                 await trailer(bot, update, tmp_directory)
             else:
                 await ani_callback(bot, update)
+        elif "-" in data:
+            # await
+            pass
     else:
         pass

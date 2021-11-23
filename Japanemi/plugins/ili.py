@@ -63,11 +63,10 @@ async def __ani__(bot, update):
         print("inline")
         await bot.answer_inline_query(inlineQueryId,
                                       results,
-                                      next_offset=f"{offset + 1}",
-                                      cache_time=1)
+                                      next_offset=f"{offset + 1}")
     except pyrogram.errors.QueryIdInvalid:
         print("noinline")
-        btns_unorder = [InlineKeyboardButton(anime.title.romaji, f"{anime.id},") for anime in animes]
+        btns_unorder = [InlineKeyboardButton(anime.title.romaji, f"{anime.id}-") for anime in animes]
         btns = order(btns_unorder, 1)
         await bot.send_message(chat_id=user_id,
                                text="Sorry por tardar 😭",
