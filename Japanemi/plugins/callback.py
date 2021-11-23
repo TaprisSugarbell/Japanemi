@@ -10,7 +10,7 @@ CHANNEL_ID = config("CHANNEL_ID", default=None, cast=int)
 AUTH_USERS = [int(i) for i in config("AUTH_USERS", default="784148805").split(" ")]
 
 
-@Client.on_callback_query(filters.regex(r"[ha]?\d*[!|]"))
+@Client.on_callback_query(filters.regex(r"[ha]?\d*[!|,]"))
 async def callback_data(bot, update):
     print(update)
     inline = None
