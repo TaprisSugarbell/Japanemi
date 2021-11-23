@@ -20,6 +20,23 @@ def clean_tags(tags):
     return clean_tag
 
 
+def xname(x: str):
+    # xname = lambda x: x.split()[-1]
+    mtch = re.findall(r"(\d+ y \d+|\d+ Y \d+|\d+|\w*)", x)
+    if re.match(".* [Oo][Vv][Aa][Ss]? .*", x.lower()):
+        nn = x.split()[-1]
+        try:
+            int(nn)
+        except ValueError:
+            nn = ""
+        return "OVA " + nn
+    else:
+        if len(mtch) > 2:
+            return mtch[-2]
+        else:
+            return "Capítulo" + mtch[-1]
+
+
 @Client.on_callback_query(filters.regex(r"anime_"))
 async def __get_anime__(bot, update):
     print(update)
@@ -27,10 +44,10 @@ async def __get_anime__(bot, update):
     chat_id = update.from_user.id
     data = int(update.data.split("_")[-1])
     page = int(update.data.split("_")[1])
-    if page > 1:
-        li = 9
-    else:
-        li = 8
+    # if page > 1:
+    #     li = 9
+    # else:
+    #     li = 8
     inline_message_id = update.inline_message_id
     a = AnimeFlash(anime_id=data)
     anime_info = a.anime()
@@ -46,7 +63,7 @@ async def __get_anime__(bot, update):
                                    des)
     except Exception as e:
         print(e)
-    eplist = a.episodes(page=page, limit=li)
+    eplist = a.episodes(page=page, limit=9)
     print(eplist)
     if 1 < eplist["page"] < eplist["pages"]:
         append_btns = [
@@ -62,7 +79,6 @@ async def __get_anime__(bot, update):
             InlineKeyboardButton("Anterior", f'anime_{page - 1}_{data}')
         ]
 
-    xname = lambda x: re.findall(r"(\d+ y \d+|\d+ Y \d+|\d+)", x)[-1]
 
     btns = [
         InlineKeyboardButton(
