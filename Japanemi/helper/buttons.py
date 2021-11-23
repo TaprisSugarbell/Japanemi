@@ -1,6 +1,6 @@
 import anilist
-from Japanemi.AnimeFlash import *
-from Japanemi.Japanemi_features.episodes import *
+from ..AnimeFlash import *
+from ..Japanemi_features.episodes import *
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 

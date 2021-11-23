@@ -3,7 +3,7 @@ import string
 from decouple import config
 from ..helper.buttons import *
 from ..helper.callback_helper import *
-from Japanemi.plugins.Japanemi import *
+from ..plugins.Japanemi import *
 
 CHANNEL_ID = config("CHANNEL_ID", default=None, cast=int)
 AUTH_USERS = [int(i) for i in config("AUTH_USERS", default="784148805").split(" ")]

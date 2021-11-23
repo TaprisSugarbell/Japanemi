@@ -1,5 +1,5 @@
 from pyrogram import Client, filters
-from Japanemi.helper.buttons import datos
+from ..helper.buttons import datos
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # https://img.anili.st/media/{id} esto es para la img del anime_name

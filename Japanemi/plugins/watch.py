@@ -2,7 +2,7 @@ import os
 from shutil import rmtree
 from decouple import config
 from pyrogram import Client
-from Japanemi.helper import filterx
+from ..helper import filterx
 
 AUTH_USERS = [int(i) for i in config("AUTH_USERS", default="784148805").split(" ")]
 
