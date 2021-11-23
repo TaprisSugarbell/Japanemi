@@ -67,7 +67,7 @@ async def __ani__(bot, update):
                                       cache_time=1)
     except pyrogram.errors.QueryIdInvalid:
         print("noinline")
-        btns_unorder = [InlineKeyboardButton(anime.title.romaji, f"info_{anime.id}") for anime in animes]
+        btns_unorder = [InlineKeyboardButton(anime.title.romaji, f"{anime.id},") for anime in animes]
         btns = order(btns_unorder, 1)
         await bot.send_message(chat_id=user_id,
                                text="Sorry por tardar 😭",
