@@ -82,7 +82,7 @@ async def __get_anime__(bot, update):
 
     btns = [
         InlineKeyboardButton(
-            f'Capítulo {xname(eplist["results"][i]["name"])}',
+            f'{xname(eplist["results"][i]["name"])}',
             f'{eplist["results"][i]["id"]}!') for i in range(len(eplist["results"]))
     ]
 
