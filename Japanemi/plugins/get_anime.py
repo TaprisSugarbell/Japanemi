@@ -22,19 +22,18 @@ def clean_tags(tags):
 
 def xname(x: str):
     # xname = lambda x: x.split()[-1]
-    mtch = re.findall(r"(\d+ y \d+|\d+ Y \d+|\d+|\w*)", x)
-    if re.match(".* [Oo][Vv][Aa][Ss]? .*", x.lower()):
+    mtch = re.findall(r"(\d+ y \d+|\d+ Y \d+|\d+)", x)
+    if re.match(".* [Oo][Vv][Aa][Ss]? .*", x):
         nn = x.split()[-1]
         try:
             int(nn)
         except ValueError:
             nn = ""
         return "OVA " + nn
+    elif re.match(".* película ?.*", x.lower()):
+        return "Película"
     else:
-        if len(mtch) > 2:
-            return "Capítulo " + mtch[-2]
-        else:
-            return "Capítulo " + mtch[-1]
+        return "Capítulo" + " " + mtch[-1]
 
 
 @Client.on_callback_query(filters.regex(r"anime_"))
