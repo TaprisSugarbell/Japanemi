@@ -32,7 +32,7 @@ def xname(x: str):
         return "OVA " + nn
     else:
         if len(mtch) > 2:
-            return mtch[-2]
+            return "Capítulo" + mtch[-2]
         else:
             return "Capítulo" + mtch[-1]
 
