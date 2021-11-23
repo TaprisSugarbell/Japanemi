@@ -258,9 +258,11 @@ async def foriter(links=None, out="./", custom=""):
     out_ = ""
     for url in links:
         try:
-            out_ = await generic_extractor(url, out=out, custom=custom)
-            out_ = out_["file"]
-            break
+            if re.match(r"https?://mega.nz", url):
+                out_ = await generic_extractor(url, out=out, custom=custom)
+            else:
+                out_ = out_["file"]
+                break
         except Exception as e:
             print(e)
             out_ = None
