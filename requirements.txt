@@ -1,5 +1,6 @@
 Pillow~=8.2.0
 beautifulsoup4~=4.9.3
+cloudscraper
 soupsieve~=2.2.1
 pip~=21.1.2
 TgCrypto~=1.2.2
@@ -10,6 +11,7 @@ urllib3~=1.26.5
 Pyrogram~=1.2.9
 idna~=2.10
 setuptools~=57.0.0
+python-decouple
 python-dotenv~=0.18.0
 requests~=2.25.1
 wget~=3.2
@@ -20,3 +22,4 @@ python-anilist
 python-ffmpeg
 ffmpeg~=1.4
 markdownify
+pyromod

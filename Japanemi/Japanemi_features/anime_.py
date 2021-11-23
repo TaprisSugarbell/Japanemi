@@ -1,9 +1,10 @@
 import re
 import json
+import requests
 import urllib.request
-from Japanemi_features.extractors import *
+from bs4 import BeautifulSoup
+from .extractors import generic_extractor
 from urllib.parse import quote_plus, unquote
-
 
 class Downcap:
     def __init__(self, url):
@@ -251,29 +252,13 @@ class InfoAnime:
         return fetch_
 
 
-async def download_file(urli, out="./", custom=""):
-    host = urllib.request.Request(urli).host
-    host2 = ".".join(host.split(".")[1:])
-    if host == "www.mediafire.com" or host == "mediafire.com":
-        dwn = await mediafire(urli, out, custom)
-    elif host == "mega.nz":
-        pass
-    elif host2 == "zippyshare.com":
-        dwn = await zippyshare(urli, out, custom)
-    else:
-        down = await generic_extractor(urli, out, custom)
-        dwn = await file_recognize(down["file"], out)
-        dwn["thumb"] = down["thumb"]
-    return dwn
-
-
 async def foriter(links=None, out="./", custom=""):
     if links is None:
         links = []
     out_ = ""
     for url in links:
         try:
-            out_ = await download_file(url, out, custom)
+            out_ = await generic_extractor(url, out=out, custom=custom)
             out_ = out_["file"]
             break
         except Exception as e:

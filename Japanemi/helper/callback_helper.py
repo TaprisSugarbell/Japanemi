@@ -1,19 +1,52 @@
 import os
-import re
 import anilist
-import youtube_dl
 from shutil import rmtree
-from dotenv import load_dotenv
+from ..AnimeFlash import *
+from decouple import config
+from ..helper import servers
 from moviepy.editor import VideoFileClip
-from Japanemi_features.episodes import *
 from google_trans_new import google_translator
-from helper.texts import capupload_text, ani_desc
-from Japanemi_features.anime_ import Downcap, foriter
-from helper.buttons import inline_option, send_trailer
+from Japanemi.Japanemi_features.episodes import *
+from Japanemi.helper.texts import capupload_text, ani_desc
+from Japanemi.Japanemi_features.anime_ import Downcap, foriter
+from Japanemi.helper.buttons import inline_option, send_trailer
 
-load_dotenv()
-CHANNEL_ID = int(os.getenv("channel_id"))
-CHANNEL_H = int(os.getenv("channel_idh"))
+CHANNEL_ID = config("CHANNEL_ID", default=None, cast=int)
+CHANNEL_H = config("CHANNEL_IDH", default=None, cast=int)
+
+
+async def af_callback(bot, data, tmp_directory):
+    data = int(data.split("!")[0])
+    aa = AnimeFlash(episode=data)
+    episode = aa.episodes()
+    title = episode["name"]
+    caption = await capupload_text(title)
+    links = servers(aa.links(episode))
+    path = await foriter(links, tmp_directory)
+    try:
+        list_dir_ = os.listdir(tmp_directory)
+        if "thumb.jpg" in list_dir_:
+            yes_thumb = True
+        else:
+            yes_thumb = False
+    except Exception as e:
+        yes_thumb = False
+        print(e)
+    clip = VideoFileClip(path)
+    duration = int(clip.duration)
+    print(duration)
+    if yes_thumb:
+        await bot.send_video(chat_id=CHANNEL_ID,
+                             video=path,
+                             thumb=f"{tmp_directory}thumb.jpg",
+                             caption=caption,
+                             duration=duration)
+    else:
+        await bot.send_video(chat_id=CHANNEL_ID,
+                             video=path,
+                             caption=caption,
+                             duration=duration)
+    rmtree(tmp_directory)
 
 
 async def ta_callback(bot, data, tmp_directory):

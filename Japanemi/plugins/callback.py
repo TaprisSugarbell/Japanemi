@@ -1,12 +1,12 @@
 import random
 import string
-from plugins.Japanemi import *
-from helper.callback_helper import *
+from decouple import config
+from ..helper.buttons import *
+from ..helper.callback_helper import *
+from Japanemi.plugins.Japanemi import *
 
-load_dotenv()
-CHANNEL_ID = int(os.getenv("channel_id"))
-AUTH_USERS_STR = os.getenv("AUTH_USERS")
-AUTH_USERS = [int(i) for i in AUTH_USERS_STR.split(" ")]
+CHANNEL_ID = config("CHANNEL_ID", default=None, cast=int)
+AUTH_USERS = [int(i) for i in config("AUTH_USERS", default="784148805").split(" ")]
 
 
 @Client.on_callback_query()
@@ -32,7 +32,7 @@ async def callback_data(bot, update):
             if data == "hentai":
                 inline = await hla_buttons()
             elif data == "anime":
-                inline = await ta_buttons()
+                inline = await af_buttons()
             KEY = string.hexdigits
             RCH = "".join([random.choice(KEY) for i in range(5)])
             try:
@@ -43,14 +43,14 @@ async def callback_data(bot, update):
             except Exception as e:
                 print(e)
         elif "!" in data:
-            await ta_callback(bot, data, tmp_directory)
+            await af_callback(bot, data, tmp_directory)
         elif "|" in data:
             await hla_callback(bot, data, tmp_directory)
         elif "reload" in data:
             if "hla" in data:
                 inline = await hla_buttons()
             elif "ta" in data:
-                inline = await ta_buttons()
+                inline = await af_buttons()
             KEY = string.hexdigits
             RCH = "".join([random.choice(KEY) for i in range(5)])
             try:

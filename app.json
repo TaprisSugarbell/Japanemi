@@ -15,15 +15,15 @@
             "description": "Dejalo así!",
             "value": "ANYTHING"
         },
-        "bot_token": {
+        "BOT_TOKEN": {
             "description": "Tu Token de Telegram de @BotFather",
             "value": ""
         },
-        "api_id": {
+        "API_ID": {
             "description": "Obtener de my.telegram.org",
             "value": ""
         },
-        "api_hash": {
+        "API_HASH": {
             "description": "Obtener de my.telegram.org",
             "value": ""
         },
@@ -31,7 +31,7 @@
           "description": "Usuarios permitidos",
           "value": "784148805"
         },
-        "channel_id": "Canal de Telegram",
+        "CHANNEL_ID": "Canal de Telegram",
         "value": ""
     },
     "addons": [],

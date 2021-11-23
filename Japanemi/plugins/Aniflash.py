@@ -2,16 +2,13 @@ import os
 import random
 import string
 from shutil import rmtree
-from helper import filterx
-from dotenv import load_dotenv
+from decouple import config
 from pyrogram import Client, filters
-from helper.texts import capupload_text
 from moviepy.editor import VideoFileClip
-from Japanemi_features.anime_ import foriter
+from Japanemi.helper.texts import capupload_text
+from Japanemi.Japanemi_features.anime_ import foriter
 
-load_dotenv()
-AUTH_USERS_STR = os.getenv("AUTH_USERS")
-AUTH_USERS = [int(i) for i in AUTH_USERS_STR.split(" ")]
+AUTH_USERS = [int(i) for i in config("AUTH_USERS", default="784148805").split(" ")]
 
 
 async def reader(file):

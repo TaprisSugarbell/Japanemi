@@ -281,3 +281,4 @@ cython_debug/
 # Mine
 *.session
 *.session-journal
+/Tests

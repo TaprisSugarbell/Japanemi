@@ -1,5 +1,6 @@
 import anilist
-from Japanemi_features.episodes import *
+from Japanemi.AnimeFlash import *
+from Japanemi.Japanemi_features.episodes import *
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
@@ -9,6 +10,23 @@ async def buttons():
     inline = InlineKeyboardMarkup([
         [btn1, btn2]
     ])
+    return inline
+
+
+async def af_buttons():
+    aa = AnimeFlash()
+    episodes = aa.anime()["results"]
+    stress = [InlineKeyboardButton(f'{i["name"]}', callback_data=f'{i["id"]}!') for i in episodes]
+    pairs = [stress[i: (i + 1)] for i in range((len(stress)))]
+    round_num = len(stress)
+    calc = len(stress) - round(round_num)
+    count = [1, 2]
+    if calc in count:
+        pairs.append((stress[-1],))
+    new_pair = pairs[:9]
+    new_pair.append((InlineKeyboardButton("Hentai", callback_data="hentai_"),
+                     InlineKeyboardButton("Reload", callback_data="reloadta")))
+    inline = InlineKeyboardMarkup(new_pair)
     return inline
 
 
