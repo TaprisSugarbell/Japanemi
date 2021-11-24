@@ -31,8 +31,10 @@
           "description": "Usuarios permitidos",
           "value": "784148805"
         },
-        "CHANNEL_ID": "Canal de Telegram",
-        "value": ""
+        "CHANNEL_ID": {
+            "description": "Canal de Telegram",
+            "value": ""
+        }
     },
     "addons": [],
     "buildpacks": [{
