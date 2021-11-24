@@ -30,10 +30,11 @@ def xname(x: str):
         except ValueError:
             nn = ""
         return "OVA " + nn
-    elif re.match(".* película ?.*", x.lower()):
-        return "Película"
     else:
-        return "Capítulo" + " " + mtch[-1]
+        try:
+            return "Capítulo" + " " + mtch[-1]
+        except IndexError:
+            return "Película"
 
 
 @Client.on_callback_query(filters.regex(r"anime_"))
