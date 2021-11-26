@@ -3,8 +3,7 @@ import json
 import requests
 import urllib.request
 from bs4 import BeautifulSoup
-# from .extractors import generic_extractor
-from extractors import generic_extractor
+from .extractors import generic_extractor
 from urllib.parse import quote_plus, unquote
 
 

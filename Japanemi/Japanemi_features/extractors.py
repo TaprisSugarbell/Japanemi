@@ -8,8 +8,7 @@ import youtube_dl
 import urllib.parse
 from PIL import Image
 from bs4 import BeautifulSoup
-# from .utils import generate_screen_shots
-from utils import generate_screen_shots
+from .utils import generate_screen_shots
 
 
 # DEBUG
