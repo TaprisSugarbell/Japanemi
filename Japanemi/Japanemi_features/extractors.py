@@ -9,7 +9,7 @@ import cloudscraper
 import urllib.parse
 from PIL import Image
 from bs4 import BeautifulSoup
-from .utils import generate_screen_shots
+from .utils import generate_screenshot
 
 
 # DEBUG
@@ -124,9 +124,10 @@ async def generic_extractor(url, out="./", custom=None, ext=None):
     out_ = out + _title + "." + _ext
     file_type = await file_recognize(out_, out)
     # Si es video trata de obtener capturas
-    if file_type["type"] == "video":
-        await generate_screen_shots(out_, out, 300, 1)
-        yes_thumb = True
+    if file_type["type"] == "video" and os.path.exists(out + "thumb.jpg") is False:
+        yes_thumb = await generate_screenshot(out_, out + "thumb.jpg")
+    elif os.path.exists(out + "thumb.jpg"):
+        yes_thumb = out + "thumb.jpg"
     else:
         yes_thumb = False
     return {"file": out_,
