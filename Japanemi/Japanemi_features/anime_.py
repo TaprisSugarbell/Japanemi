@@ -265,8 +265,3 @@ async def foriter(links=None, out="./", custom=""):
             out_ = None
     return out_
 
-
-# yy = Downcap("https://tioanime.com/ver/kenyuu-densetsu-yaiba-1")
-yy = Downcap("https://hentaila.com/ver/euphoria--1")
-print(yy.get_url())
-
