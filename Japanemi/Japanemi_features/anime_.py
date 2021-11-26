@@ -3,8 +3,19 @@ import json
 import requests
 import urllib.request
 from bs4 import BeautifulSoup
-from .extractors import generic_extractor
+# from .extractors import generic_extractor
+from extractors import generic_extractor
 from urllib.parse import quote_plus, unquote
+
+
+def filter_videos(sc):
+    mtch = re.findall(r"var videos = .*?{?.*\[.*;?", sc)
+    rslt = json.loads(mtch[0].replace("var videos = ", "").replace(";", "").strip())
+    if isinstance(rslt, dict):
+        return [i["code"] for i in rslt["SUB"]]
+    else:
+        return [re.findall(r"https?://.*", i[1])[0] for i in rslt]
+
 
 class Downcap:
     def __init__(self, url):
@@ -64,16 +75,8 @@ class Downcap:
     def ta_scraping(self):
         r = requests.get(self.url)
         soup = BeautifulSoup(r.content, "html.parser")
-        script = soup.find_all("script")[-2]
-        lest = script.contents[0].strip().split(";")[0].split("var videos = ")[1]
-        json_dumps = lest.replace(
-            "[", "{").replace("]", "}").replace("},{", ",").replace(
-            "\\", "").replace('","', '":"').replace(",0", "")[1:-1]
-        json_bruh = json.loads(json_dumps).values()
-        soup = BeautifulSoup(r.content, 'html.parser')
-        lnk = []
-        for i in json_bruh:
-            lnk.append(i)
+        script = soup.find_all("script")[-3]
+        lnk = filter_videos(script.string)
         for script in soup.find_all(attrs={"class": "btn btn-success btn-download btn-sm rounded-pill"}):
             url = script['href']
             lnk.append(url)
@@ -82,16 +85,8 @@ class Downcap:
     def hla_scraping(self):
         r = requests.get(self.url)
         soup = BeautifulSoup(r.content, "html.parser")
-        script = soup.find_all("script")[-4]
-        lest = script.contents[0].strip().split(";")[3].split("var videos = ")[1]
-        json_dumps = lest.replace(
-            "[", "{").replace("]", "}").replace("},{", ",").replace(
-            "\\", "").replace('","', '":"').replace(",0", "")[1:-1]
-        json_bruh = json.loads(json_dumps).values()
-        soup = BeautifulSoup(r.content, 'html.parser')
-        lnk = []
-        for i in json_bruh:
-            lnk.append(i)
+        script = soup.find_all("script")[-6]
+        lnk = filter_videos(script.string)
         for script in soup.find_all(attrs={"class": "btn sm rnd"}):
             url = script['href']
             lnk.append(url)
@@ -107,6 +102,8 @@ class Downcap:
             lnk = self.af_scraping()
         elif site == "hla":
             lnk = self.hla_scraping()
+        else:
+            lnk = None
         return lnk
 
 
@@ -268,3 +265,9 @@ async def foriter(links=None, out="./", custom=""):
             print(e)
             out_ = None
     return out_
+
+
+# yy = Downcap("https://tioanime.com/ver/kenyuu-densetsu-yaiba-1")
+yy = Downcap("https://hentaila.com/ver/euphoria--1")
+print(yy.get_url())
+
