@@ -69,7 +69,7 @@ def links_filters(function):
             protocol = args[0].split(".")[0]
             if u:
                 args = (protocol + ".zippyshare.com" + u,)
-        elif re.match("(embedsito|diasfem|fembed|femax20).com", host):
+        elif re.match("(www.)?(embedsito|diasfem|fembed|femax20).com", host):
             c = cloudscraper.create_scraper()
             r = c.post("https://diasfem.com/api/source/" + args[0].split("/")[-1])
             args = (r.json()["data"][-1]["file"],)
