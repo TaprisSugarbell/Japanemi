@@ -60,6 +60,7 @@ async def __lstn__(bot, update):
                 err = '{}: {}'.format(str(e[0]).split("'")[1], e[1].args[0])
                 await bot.send_message(chat_id=update.from_user.id,
                                        text=f"{err}\n📮 Envía este error a @SayuOgiwara")
+                raise
             finally:
                 await bot.delete_messages(chat_id=update.from_user.id,
                                           message_ids=int(msd.message_id))
