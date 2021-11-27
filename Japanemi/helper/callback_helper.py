@@ -1,4 +1,5 @@
 import os
+import sys
 import anilist
 from shutil import rmtree
 from ..AnimeFlash import *
@@ -26,38 +27,49 @@ async def af_callback(bot, data, update, tmp_directory):
     links = servers(aa.links(episode))
     msd = await bot.send_message(update.from_user.id,
                                  "Descargando video.")
-    fff = await foriter(links, tmp_directory)
-    path = fff["file"]
-    file_type = fff["type"]
-    yes_thumb = fff["thumb"]
-    clip = VideoFileClip(path)
-    size = clip.size
-    height = size[1]
-    width = size[0]
-    duration = int(clip.duration)
-    print(duration)
-    print(os.listdir(tmp_directory))
     try:
-        await bot.edit_message_text(chat_id=update.from_user.id,
-                                    text=f"Subiendo {file_type}.",
-                                    message_id=int(msd.message_id))
+        fff = await foriter(links, tmp_directory)
+        path = fff["file"]
+        file_type = fff["type"]
+        yes_thumb = fff["thumb"]
+        clip = VideoFileClip(path)
+        size = clip.size
+        height = size[1]
+        width = size[0]
+        duration = int(clip.duration)
+        print(duration)
+        print(os.listdir(tmp_directory))
+        try:
+            await bot.edit_message_text(chat_id=update.from_user.id,
+                                        text=f"Subiendo {file_type}.",
+                                        message_id=int(msd.message_id))
+        except Exception as e:
+            print(e)
+        if yes_thumb:
+            await bot.send_video(chat_id=CHANNEL_ID,
+                                 width=width,
+                                 height=height,
+                                 video=path,
+                                 thumb=yes_thumb,
+                                 caption=caption,
+                                 duration=duration)
+        else:
+            await bot.send_video(chat_id=CHANNEL_ID,
+                                 width=width,
+                                 height=height,
+                                 video=path,
+                                 caption=caption,
+                                 duration=duration)
     except Exception as e:
         print(e)
-    if yes_thumb:
-        await bot.send_video(chat_id=CHANNEL_ID,
-                             width=width,
-                             height=height,
-                             video=path,
-                             thumb=yes_thumb,
-                             caption=caption,
-                             duration=duration)
-    else:
-        await bot.send_video(chat_id=CHANNEL_ID,
-                             width=width,
-                             height=height,
-                             video=path,
-                             caption=caption,
-                             duration=duration)
+        e = sys.exc_info()
+        err = '{}: {}'.format(str(e[0]).split("'")[1], e[1].args[0])
+        await bot.send_message(chat_id=update.from_user.id,
+                               text=f"{err}\n📮 Envía este error a @SayuOgiwara")
+        raise
+    finally:
+        await bot.delete_messages(chat_id=update.from_user.id,
+                                  message_ids=int(msd.message_id))
     rmtree(tmp_directory)
 
 
