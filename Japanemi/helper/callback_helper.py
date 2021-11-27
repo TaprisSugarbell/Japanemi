@@ -24,28 +24,31 @@ async def af_callback(bot, data, update, tmp_directory):
     title = episode["name"]
     caption = await capupload_text(title)
     links = servers(aa.links(episode))
-    path = await foriter(links, tmp_directory)
-    try:
-        list_dir_ = os.listdir(tmp_directory)
-        if "thumb.jpg" in list_dir_:
-            yes_thumb = True
-        else:
-            yes_thumb = False
-    except Exception as e:
-        yes_thumb = False
-        print(e)
+    msd = await bot.send_message(update.from_user.id,
+                                 "Descargando video.")
+    fff = await foriter(links, tmp_directory)
+    path = fff["file"]
+    file_type = fff["type"]
+    yes_thumb = fff["thumb"]
     clip = VideoFileClip(path)
     size = clip.size
     height = size[1]
     width = size[0]
     duration = int(clip.duration)
     print(duration)
+    print(os.listdir(tmp_directory))
+    try:
+        await bot.edit_message_text(chat_id=update.from_user.id,
+                                    text=f"Subiendo {file_type}.",
+                                    message_id=int(msd.message_id))
+    except Exception as e:
+        print(e)
     if yes_thumb:
         await bot.send_video(chat_id=CHANNEL_ID,
                              width=width,
                              height=height,
                              video=path,
-                             thumb=f"{tmp_directory}thumb.jpg",
+                             thumb=yes_thumb,
                              caption=caption,
                              duration=duration)
     else:
