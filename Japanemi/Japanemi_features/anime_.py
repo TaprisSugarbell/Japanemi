@@ -1,5 +1,6 @@
 import re
 import json
+import base64
 import requests
 import urllib.request
 from bs4 import BeautifulSoup
@@ -40,17 +41,12 @@ class Downcap:
     def mc_scraping(self):
         r = requests.get(self.url)
         soup = BeautifulSoup(r.content, "html.parser")
-        player = soup.find_all(attrs={"class": "TPlayerTb"})
-        downlinks = soup.find_all(attrs={"class": "btnWeb"})
+        player = soup.find_all("li", attrs={"id": "play-video"})
+        downlinks = soup.find("div", attrs={"class": "downbtns"}).find_all("a")
         list_redis = []
         for i in range(len(player)):
-            if i == 0:
-                redis_ = unquote(player[i].find("iframe").get("src"))
-            else:
-                redis_ = unquote(player[i].text.split("src")[1].split('"')[1])
-                r = requests.get(redis_)
-                list_redis.append(r.text.split('var redir =')[1].split('"')[1])
-
+            redis_ = base64.b64decode(player[i].find("a").get("data-player"))
+            list_redis.append(redis_.decode("utf-8").split("url=")[-1])
         for i in downlinks:
             if urllib.request.Request(i).host == "monoschinos2.com":
                 continue
