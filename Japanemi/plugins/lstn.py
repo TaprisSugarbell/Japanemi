@@ -57,6 +57,7 @@ async def __lstn__(bot, update):
                                          width=width)
             except Exception as e:
                 print(e)
+                sayulog.error("Ha ocurrido un error.", exc_info=e)
                 e = sys.exc_info()
                 err = '{}: {}'.format(str(e[0]).split("'")[1], e[1].args[0])
                 xxs = await bot.send_message(chat_id=update.from_user.id,
@@ -69,6 +70,6 @@ async def __lstn__(bot, update):
                     rmtree("./Downloads")
                 else:
                     rmtree(tmp_directory)
-                    sayulog.info(f'{os.listdir("./Downloads/")}')
-                sayulog.info("Se elimino el archivo.")
+                    sayulog.warning(f'{os.listdir("./Downloads/")}')
+                sayulog.warning("Se elimino el archivo.")
 

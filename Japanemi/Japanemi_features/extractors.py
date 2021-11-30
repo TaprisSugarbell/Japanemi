@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import wget
+import asyncio
 import requests
 import youtube_dl
 import cloudscraper
@@ -47,6 +48,8 @@ async def file_recognize(filename, out="./"):
 
 
 def links_filters(function):
+    loop = asyncio.get_event_loop()
+
     def wrapper(*args, **kwargs):
         host = args[0].split("/")[2]
         if re.match("www.mediafire.com", host):
@@ -72,13 +75,15 @@ def links_filters(function):
             c = cloudscraper.create_scraper()
             r = c.post("https://diasfem.com/api/source/" + args[0].split("/")[-1])
             args = (r.json()["data"][-1]["file"],)
-        return function(*args, **kwargs)
+        return loop.run_until_complete(function(*args, **kwargs))
     return wrapper
 
 
 def extractor_base(function):
+    loop = asyncio.get_event_loop()
+
     def wrapper(*args, **kwargs):
-        return function(*args, **kwargs)
+        return loop.run_until_complete(function(*args, **kwargs))
     return wrapper
 
 
@@ -89,7 +94,7 @@ async def generic_extractor(url, out="./", custom=None, ext=None):
         out = out + "/"
     video_info = youtube_dl.YoutubeDL().extract_info(url, download=False)
     # Thumbnail?
-    sayulog.info(video_info)
+    sayulog.warning(video_info)
     # print(video_info)
     try:
         try:
@@ -130,7 +135,7 @@ async def generic_extractor(url, out="./", custom=None, ext=None):
         yes_thumb = out + "thumb.jpg"
     else:
         yes_thumb = False
-    sayulog.info(f'{os.listdir(out)}')
+    sayulog.warning(f'{os.listdir(out)}')
     return {"file": out_,
             "type": file_type["type"],
             "thumb": yes_thumb}

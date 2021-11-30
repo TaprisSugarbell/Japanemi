@@ -30,7 +30,7 @@ async def af_callback(bot, data, update, tmp_directory):
     msd = await bot.send_message(update.from_user.id,
                                  "Descargando video.")
     try:
-        sayulog.info("Links: %r", links)
+        sayulog.warning("Links: %r", links)
         fff = await foriter(links, tmp_directory)
         path = fff["file"]
         file_type = fff["type"]
@@ -78,7 +78,7 @@ async def af_callback(bot, data, update, tmp_directory):
             rmtree("./Downloads")
         else:
             rmtree(tmp_directory)
-            sayulog.info(f'{os.listdir("./Downloads/")}')
+            sayulog.warning(f'{os.listdir("./Downloads/")}')
 
 
 async def ta_callback(bot, data, tmp_directory):
