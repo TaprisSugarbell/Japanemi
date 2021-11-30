@@ -130,7 +130,7 @@ async def generic_extractor(url, out="./", custom=None, ext=None):
         yes_thumb = out + "thumb.jpg"
     else:
         yes_thumb = False
-    sayulog.info(f'{os.listdir(out_)}')
+    sayulog.info(f'{os.listdir(out)}')
     return {"file": out_,
             "type": file_type["type"],
             "thumb": yes_thumb}
