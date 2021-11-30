@@ -6,17 +6,12 @@ from logging import handlers
 # from pyromod import listen
 from decouple import config
 
-logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-                    level=logging.DEBUG,
-                    handlers=[
-                        handlers.RotatingFileHandler(
-                            filename="./logs/sayu.log",
-                            maxBytes=3145728,
-                            backupCount=1
-                        ),
-                        logging.StreamHandler()
-                    ]
-                    )
+log_ = "./logs/"
+if os.path.exists(log_):
+    pass
+else:
+    os.makedirs("./logs/", exist_ok=True)
+logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s', level=logging.WARNING)
 
 # vars
 API_ID = config("API_ID", default=None, cast=int)
