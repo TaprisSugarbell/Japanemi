@@ -1,6 +1,7 @@
 import os
 import sys
 import anilist
+from .. import sayulog
 from shutil import rmtree
 from ..AnimeFlash import *
 from decouple import config
@@ -17,6 +18,7 @@ CHANNEL_H = config("CHANNEL_IDH", default=None, cast=int)
 
 
 async def af_callback(bot, data, update, tmp_directory):
+    xxs = None
     if "$" in data:
         CHANNEL_ID: int = update.from_user.id
     data = int(data.split("!")[0])
@@ -62,14 +64,21 @@ async def af_callback(bot, data, update, tmp_directory):
                                  duration=duration)
     except Exception as e:
         print(e)
+        sayulog.error("Ha ocurrido un error.", exc_info=e)
         e = sys.exc_info()
         err = '{}: {}'.format(str(e[0]).split("'")[1], e[1].args[0])
-        await bot.send_message(chat_id=update.from_user.id,
-                               text=f"{err}\n📮 Envía este error a @SayuOgiwara")
+        xxs = await bot.send_message(chat_id=update.from_user.id,
+                                     text=f"{err}\n📮 Envía este error a @SayuOgiwara")
         raise
     finally:
         await bot.delete_messages(chat_id=update.from_user.id,
                                   message_ids=int(msd.message_id))
+        if xxs:
+            rmtree("./Downloads")
+        else:
+            rmtree(tmp_directory)
+            sayulog.info(f'{os.listdir("./Downloads/")}')
+
     rmtree(tmp_directory)
 
 
