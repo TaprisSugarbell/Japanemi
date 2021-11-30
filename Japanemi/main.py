@@ -11,7 +11,7 @@ if os.path.exists(log_):
     pass
 else:
     os.makedirs("./logs/", exist_ok=True)
-logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s', level=logging.WARNING)
+logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s', level=logging.INFO)
 
 # vars
 API_ID = config("API_ID", default=None, cast=int)

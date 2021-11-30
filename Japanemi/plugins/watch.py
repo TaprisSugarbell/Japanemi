@@ -1,10 +1,8 @@
 import os
 from shutil import rmtree
-from decouple import config
+from .. import AUTH_USERS
 from pyrogram import Client
 from ..helper import filterx
-
-AUTH_USERS = [int(i) for i in config("AUTH_USERS", default="784148805").split(" ")]
 
 
 @Client.on_message(filterx.command(["watch"]))
