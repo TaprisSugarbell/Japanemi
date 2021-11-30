@@ -2,11 +2,21 @@ import os
 import logging
 import pyrogram
 import pyromod.listen
+from logging import handlers
 # from pyromod import listen
 from decouple import config
 
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-                    level=logging.WARNING)
+                    level=logging.DEBUG,
+                    handlers=[
+                        handlers.RotatingFileHandler(
+                            filename="./logs/sayu.log",
+                            maxBytes=3145728,
+                            backupCount=1
+                        ),
+                        logging.StreamHandler()
+                    ]
+                    )
 
 # vars
 API_ID = config("API_ID", default=None, cast=int)

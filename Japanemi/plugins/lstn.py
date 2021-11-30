@@ -2,8 +2,8 @@ import os
 import sys
 import random
 import string
-from . import AUTH_USERS
 from shutil import rmtree
+from .. import AUTH_USERS, sayulog
 from pyrogram import Client, filters
 from moviepy.editor import VideoFileClip
 from ..Japanemi_features.anime_ import Downcap, foriter
@@ -11,6 +11,7 @@ from ..Japanemi_features.anime_ import Downcap, foriter
 
 @Client.on_message(filters.regex(r"https?://(www\d*)?"))
 async def __lstn__(bot, update):
+    xxs = None
     print(update)
     if update.from_user.id in AUTH_USERS:
         links = Downcap(update.text).get_url()
@@ -58,11 +59,16 @@ async def __lstn__(bot, update):
                 print(e)
                 e = sys.exc_info()
                 err = '{}: {}'.format(str(e[0]).split("'")[1], e[1].args[0])
-                await bot.send_message(chat_id=update.from_user.id,
-                                       text=f"{err}\n📮 Envía este error a @SayuOgiwara")
+                xxs = await bot.send_message(chat_id=update.from_user.id,
+                                             text=f"{err}\n📮 Envía este error a @SayuOgiwara")
                 raise
             finally:
                 await bot.delete_messages(chat_id=update.from_user.id,
                                           message_ids=int(msd.message_id))
-            rmtree(tmp_directory)
+                if xxs:
+                    rmtree("./Downloads")
+                else:
+                    rmtree(tmp_directory)
+                    sayulog.info(f'{os.listdir("./Downloads/")}')
+                sayulog.info("Se elimino el archivo.")
 

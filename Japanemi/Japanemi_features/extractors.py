@@ -2,21 +2,20 @@ import os
 import re
 import sys
 import wget
-import logging
 import requests
 import youtube_dl
 import cloudscraper
 import urllib.parse
 from PIL import Image
+from .. import sayulog
 from bs4 import BeautifulSoup
 from .utils import generate_screenshot
 
 
-# DEBUG
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
+# logging.basicConfig(level=logging.DEBUG,
+#                     format='%(levelname)s - %(message)s')
+# logger = logging.getLogger(__name__)
+# logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
 async def file_recognize(filename, out="./"):
@@ -90,7 +89,8 @@ async def generic_extractor(url, out="./", custom=None, ext=None):
         out = out + "/"
     video_info = youtube_dl.YoutubeDL().extract_info(url, download=False)
     # Thumbnail?
-    print(video_info)
+    sayulog.info(video_info)
+    # print(video_info)
     try:
         try:
             thumbnail = video_info["thumbnail"]
@@ -130,6 +130,7 @@ async def generic_extractor(url, out="./", custom=None, ext=None):
         yes_thumb = out + "thumb.jpg"
     else:
         yes_thumb = False
+    sayulog.info(f'{os.listdir(out_)}')
     return {"file": out_,
             "type": file_type["type"],
             "thumb": yes_thumb}
