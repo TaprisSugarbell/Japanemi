@@ -30,6 +30,7 @@ async def af_callback(bot, data, update, tmp_directory):
     msd = await bot.send_message(update.from_user.id,
                                  "Descargando video.")
     try:
+        sayulog.info("Links: %r", links)
         fff = await foriter(links, tmp_directory)
         path = fff["file"]
         file_type = fff["type"]
