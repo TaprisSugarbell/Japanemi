@@ -79,8 +79,6 @@ async def af_callback(bot, data, update, tmp_directory):
             rmtree(tmp_directory)
             sayulog.info(f'{os.listdir("./Downloads/")}')
 
-    rmtree(tmp_directory)
-
 
 async def ta_callback(bot, data, tmp_directory):
     data = int(data.split("!")[0])
