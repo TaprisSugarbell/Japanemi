@@ -3,7 +3,7 @@ from PIL import Image
 from moviepy.editor import VideoFileClip
 
 
-async def generate_screenshot(file, name: str = "./thumb.jpg"):
+def generate_screenshot(file, name: str = "./thumb.jpg"):
     clip = VideoFileClip(file)
     ss_img = int(clip.duration / random.randint(15, 30))
     frame = clip.get_frame(ss_img)

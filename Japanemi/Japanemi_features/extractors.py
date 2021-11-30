@@ -19,7 +19,7 @@ from .utils import generate_screenshot
 # logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
-async def file_recognize(filename, out="./"):
+def file_recognize(filename, out="./"):
     file_type = "document"
     images = ["jpg", "png", "webp"]
     videos = ["mp4", "mkv", "webm"]
@@ -48,8 +48,6 @@ async def file_recognize(filename, out="./"):
 
 
 def links_filters(function):
-    loop = asyncio.get_event_loop()
-
     def wrapper(*args, **kwargs):
         host = args[0].split("/")[2]
         if re.match("www.mediafire.com", host):
@@ -75,21 +73,19 @@ def links_filters(function):
             c = cloudscraper.create_scraper()
             r = c.post("https://diasfem.com/api/source/" + args[0].split("/")[-1])
             args = (r.json()["data"][-1]["file"],)
-        return loop.run_until_complete(function(*args, **kwargs))
+        return function(*args, **kwargs)
     return wrapper
 
 
 def extractor_base(function):
-    loop = asyncio.get_event_loop()
-
     def wrapper(*args, **kwargs):
-        return loop.run_until_complete(function(*args, **kwargs))
+        return function(*args, **kwargs)
     return wrapper
 
 
 @links_filters
 @extractor_base
-async def generic_extractor(url, out="./", custom=None, ext=None):
+def generic_extractor(url, out="./", custom=None, ext=None):
     if out[-1] != "/":
         out = out + "/"
     video_info = youtube_dl.YoutubeDL().extract_info(url, download=False)
@@ -127,10 +123,10 @@ async def generic_extractor(url, out="./", custom=None, ext=None):
         ydl.download([url])
     # Filename
     out_ = out + _title + "." + _ext
-    file_type = await file_recognize(out_, out)
+    file_type = file_recognize(out_, out)
     # Si es video trata de obtener capturas
     if file_type["type"] == "video" and os.path.exists(out + "thumb.jpg") is False:
-        yes_thumb = await generate_screenshot(out_, out + "thumb.jpg")
+        yes_thumb = generate_screenshot(out_, out + "thumb.jpg")
     elif os.path.exists(out + "thumb.jpg"):
         yes_thumb = out + "thumb.jpg"
     else:
@@ -139,3 +135,6 @@ async def generic_extractor(url, out="./", custom=None, ext=None):
     return {"file": out_,
             "type": file_type["type"],
             "thumb": yes_thumb}
+
+
+
