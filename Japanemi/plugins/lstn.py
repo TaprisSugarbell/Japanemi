@@ -2,11 +2,17 @@ import os
 import sys
 import random
 import string
+import heroku3
 from shutil import rmtree
+from decouple import config
 from .. import AUTH_USERS, sayulog
 from pyrogram import Client, filters
 from moviepy.editor import VideoFileClip
 from ..Japanemi_features.anime_ import Downcap, foriter
+
+# ENV
+HEROKU_API_KEY = config("HEROKU_API_KEY")
+HEROKU_APP_NAME = config("HEROKU_APP_NAME")
 
 
 @Client.on_message(filters.regex(r"https?://(www\d*)?"))
@@ -55,6 +61,14 @@ async def __lstn__(bot, update):
                                          duration=duration,
                                          height=height,
                                          width=width)
+            except BlockingIOError as e:
+                sayulog.error(e)
+                xxs = await bot.send_message(chat_id=update.from_user.id,
+                                             text="Se lleno la memoria del bot, "
+                                                  "se reiniciara y en 1m puedes enviar el link de nuevo :3.")
+                heroku_conn = heroku3.from_key(HEROKU_API_KEY)
+                app = heroku_conn.app(HEROKU_APP_NAME)
+                app.restart()
             except Exception as e:
                 print(e)
                 sayulog.error("Ha ocurrido un error.", exc_info=e)
