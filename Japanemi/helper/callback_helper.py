@@ -1,6 +1,7 @@
 import os
 import sys
 import anilist
+import heroku3
 from .. import sayulog
 from shutil import rmtree
 from ..AnimeFlash import *
@@ -13,6 +14,9 @@ from Japanemi.helper.texts import capupload_text, ani_desc
 from Japanemi.Japanemi_features.anime_ import Downcap, foriter
 from Japanemi.helper.buttons import inline_option, send_trailer
 
+# ENV
+HEROKU_API_KEY = config("HEROKU_API_KEY")
+HEROKU_APP_NAME = config("HEROKU_APP_NAME")
 CHANNEL_ID = config("CHANNEL_ID", default=None, cast=int)
 CHANNEL_H = config("CHANNEL_IDH", default=None, cast=int)
 
@@ -63,6 +67,14 @@ async def af_callback(bot, data, update, tmp_directory):
                                  video=path,
                                  caption=caption,
                                  duration=duration)
+    except BlockingIOError as e:
+        sayulog.error(e)
+        xxs = await bot.send_message(chat_id=update.from_user.id,
+                                     text="Se lleno la memoria del bot, "
+                                          "se reiniciara y en 1m puedes dar click de nuevo :3.")
+        heroku_conn = heroku3.from_key(HEROKU_API_KEY)
+        app = heroku_conn.app(HEROKU_APP_NAME)
+        app.restart()
     except Exception as e:
         print(e)
         sayulog.error("Ha ocurrido un error.", exc_info=e)

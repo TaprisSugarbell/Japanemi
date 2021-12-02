@@ -65,7 +65,7 @@ async def __lstn__(bot, update):
                 sayulog.error(e)
                 xxs = await bot.send_message(chat_id=update.from_user.id,
                                              text="Se lleno la memoria del bot, "
-                                                  "se reiniciara y en 1m puedes enviar el link de nuevo :3.")
+                                                  "se reiniciara y en 1m puedes dar click de nuevo :3.")
                 heroku_conn = heroku3.from_key(HEROKU_API_KEY)
                 app = heroku_conn.app(HEROKU_APP_NAME)
                 app.restart()
