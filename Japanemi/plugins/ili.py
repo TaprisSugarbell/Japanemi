@@ -1,3 +1,4 @@
+import re
 import anilist
 import pyrogram.errors
 from ..AnimeFlash import *
@@ -13,6 +14,48 @@ order = lambda some_list, x: [some_list[i:i + x] for i in range(0, len(some_list
 
 async def find_anime(anime_name: str, limit: int = 10, page: int = 1):
     return await anilist.AsyncClient().search_anime(anime_name, limit, page)
+
+
+@Client.on_inline_query(filters.regex(r"^<anime>$"))
+async def __nnl__(bot, update):
+    print(update)
+    inlineQueryId = update.id
+    query = update.query[1:-1]
+    if query == "anime":
+        try:
+            offset = int(update.offset)
+        except ValueError:
+            offset = 1
+        a = AnimeFlash("")
+        animes = a.anime(offset)
+        results = []
+        if animes["pages"] > 1:
+            for anime in animes["results"]:
+                thumb = arm_link(anime, 2)
+                results.append(
+                    InlineQueryResultArticle(
+                        title=anime["name"],
+                        input_message_content=InputTextMessageContent(
+                            message_text=f'{anime["name"]} <a href="{thumb}">&#8205;</a>'
+                        ),
+                        description=f'Capítulo {anime["name"].split()[-1]}',
+                        thumb_url=thumb,
+                        reply_markup=InlineKeyboardMarkup(
+                            [
+                                [
+                                    InlineKeyboardButton("Lista de episodios", f'anime_1_{anime["anime_id"]}'),
+                                    InlineKeyboardButton("Subir capítulo", f'{anime["id"]}!')
+                                ]
+                            ]
+                        )
+                    )
+                )
+            await bot.answer_inline_query(inlineQueryId,
+                                          results,
+                                          next_offset=f"{offset + 1}",
+                                          cache_time=1)
+    else:
+        pass
 
 
 @Client.on_inline_query(filters.regex(r"<ani> (\?|.*)"))
