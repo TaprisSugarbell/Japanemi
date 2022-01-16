@@ -22,7 +22,7 @@ def clean_tags(tags):
 
 def xname(x: str):
     # xname = lambda x: x.split()[-1]
-    mtch = re.findall(r"(\d+ y \d+|\d+ Y \d+|\d+)", x)
+    mtch = re.findall(r"(\d+ y \d+|\d+ Y \d+|\d+\.?\d*)", x)
     if re.match(".* [Oo][Vv][Aa][Ss]? .*", x):
         nn = x.split()[-1]
         try:
