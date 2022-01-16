@@ -23,6 +23,12 @@ async def capupload_text(title):
     except Exception as e:
         print(e)
         twg = " ".join(title.split(" ")[:-1])
+    try:
+        cap = int(cap)
+    except ValueError:
+        cap = re.findall(r"\d+\.?\d*", title)[-1]
+        twc = "_".join(titl.replace(" " + cap, "")).replace(".", "").replace("-", "_")
+        twg = titl.replace(" " + cap, "")
     caption = \
         f"#{twc}\n" \
         f"💮 {twg}\n" \
