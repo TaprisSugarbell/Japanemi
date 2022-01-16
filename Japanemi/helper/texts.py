@@ -26,8 +26,12 @@ async def capupload_text(title):
     try:
         cap = int(cap)
     except ValueError:
-        cap = re.findall(r"\d+\.?\d*", title)[-1]
-        twc = "_".join(titl.replace(" " + cap, "")).replace(".", "").replace("-", "_")
+        _ec = re.findall(r"\d+\.?\d*", title)
+        if len(_ec) > 0:
+            cap = _ec[-1]
+        else:
+            cap = 1
+        twc = "_".join(titl.replace(" " + cap, "").split()).replace(".", "").replace("-", "_")
         twg = titl.replace(" " + cap, "")
     caption = \
         f"#{twc}\n" \
