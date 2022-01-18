@@ -1,4 +1,5 @@
 Pillow~=8.2.0
+bcrypt
 beautifulsoup4~=4.9.3
 cloudscraper
 soupsieve~=2.2.1
