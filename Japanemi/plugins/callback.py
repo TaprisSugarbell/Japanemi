@@ -162,7 +162,7 @@ async def __capblix__(bot, update):
             except Exception as e:
                 print(e)
             if yes_thumb:
-                await bot.send_video(chat_id=CHANNEL_ID,
+                await bot.send_video(chat_id=user_id,
                                      width=width,
                                      height=height,
                                      video=path,
@@ -170,7 +170,7 @@ async def __capblix__(bot, update):
                                      caption=caption,
                                      duration=duration)
             else:
-                await bot.send_video(chat_id=CHANNEL_ID,
+                await bot.send_video(chat_id=user_id,
                                      width=width,
                                      height=height,
                                      video=path,
