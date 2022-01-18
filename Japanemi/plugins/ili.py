@@ -59,7 +59,7 @@ async def __nnl__(bot, update):
 
         requests = cloudscraper.create_scraper()
         caps = await get_caps(page=offset)
-        # print(caps)
+        print(caps)
         # print(type(caps))
         # a = AnimeFlash("")
         # animes = a.anime(offset)
