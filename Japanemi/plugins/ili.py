@@ -3,6 +3,7 @@ import bcrypt
 import anilist
 import cloudscraper
 import pyrogram.errors
+from bs4 import BeautifulSoup
 from ..helper.buttons import datos
 from pyrogram import Client, filters
 from google_trans_new import google_translator
@@ -266,5 +267,61 @@ async def __blix__(bot, update):
     #                 )
     #             )
     #         )
-        # await bot.answer_inline_query(inlineQueryId,
-        #                               results)
+    # await bot.answer_inline_query(inlineQueryId,
+    #                               results)
+
+
+@Client.on_inline_query(filters.regex(r"^<jk>\s*"))
+async def __jk__(bot, update):
+    print(update)
+    parser = "html.parser"
+    url = "https://jkanime.net"
+    inlineQueryId = update.id
+    query = update.query.strip()[1:-1]
+    if query == "jk":
+        try:
+            offset = int(update.offset)
+        except ValueError:
+            offset = 1
+
+        requests = cloudscraper.create_scraper(cloudscraper.Session)
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, "html.parser")
+        caps = soup.find("div", {"class": "maximoaltura"}).find_all("a")
+        # print(caps)
+        # print(type(caps))
+        # a = AnimeFlash("")
+        # animes = a.anime(offset)
+        results = []
+        for cap in caps:
+            _ti = cap.find("img")
+            title = _ti.get("alt")
+            thumb = _ti.get("src")
+            link = cap.get("href")
+            link_split = link.split("/")
+            anime_uri = link_split[3]
+            number = link_split[-2]
+            results.append(
+                InlineQueryResultArticle(
+                    title=title,
+                    input_message_content=InputTextMessageContent(
+                        message_text=f'{title} <a href="{thumb}">&#8205;</a>'
+                    ),
+                    description=f'Capítulo {number}',
+                    thumb_url=thumb,
+                    reply_markup=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton("Lista de Episodios",
+                                                     f'jk_{anime_uri}'),
+                                InlineKeyboardButton("Subir capítulo",
+                                                     f'capjk_{anime_uri}_{number}')
+                            ]
+                        ]
+                    )
+                )
+            )
+        await bot.answer_inline_query(inlineQueryId,
+                                      results,
+                                      cache_time=1)
+
