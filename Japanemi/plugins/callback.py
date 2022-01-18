@@ -136,7 +136,7 @@ async def __capblix__(bot, update):
         if not os.path.isdir(tmp_directory):
             os.makedirs(tmp_directory)
         # ****************************************************************
-        episode_uuid = data.replace("capblix_")
+        episode_uuid = data.replace("capblix_", "")
         server_links = await get_caps(episode_uuid=episode_uuid)
         links = [i["url"] for i in server_links]
         caption = f'@Japanemision'
