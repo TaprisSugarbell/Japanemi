@@ -47,6 +47,37 @@ async def find_anime(anime_name: str, limit: int = 10, page: int = 1):
     return await anilist.AsyncClient().search_anime(anime_name, limit, page)
 
 
+@Client.on_inline_query(filters.regex(r"\W*$"))
+async def __menu__(bot, update):
+    print(update)
+    _bot = "@JapanemiBot "
+    inlineQueryId = update.id
+    thumb = "https://tinyurl.com/hiiragishinoa"
+    results = [
+        InlineQueryResultArticle(
+            title="Menú",
+            input_message_content=InputTextMessageContent(
+                message_text=f'Menú <a href="{thumb}">&#8205;</a>'
+            ),
+            description=f'Menú para no tener que acordarme de los comandos.',
+            thumb_url=thumb,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton("AnimeBlix",
+                                             switch_inline_query_current_chat=_bot + '<blix> '),
+                        InlineKeyboardButton("Jkanime",
+                                             switch_inline_query_current_chat=_bot + '<jk> ')
+                    ]
+                ]
+            )
+        )
+        ]
+    await bot.answer_inline_query(inlineQueryId,
+                                  results,
+                                  cache_time = 1)
+
+
 @Client.on_inline_query(filters.regex(r"^<blix>\s*"))
 async def __nnl__(bot, update):
     print(update)
