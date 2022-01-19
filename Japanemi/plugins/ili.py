@@ -63,6 +63,12 @@ async def __menu__(bot, update):
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
+                        InlineKeyboardButton(
+                            "AniList",
+                            switch_inline_query_current_chat="<ani> "
+                        )
+                    ],
+                    [
                         InlineKeyboardButton("AnimeBlix",
                                              switch_inline_query_current_chat='<blix> '),
                         InlineKeyboardButton("Jkanime",
