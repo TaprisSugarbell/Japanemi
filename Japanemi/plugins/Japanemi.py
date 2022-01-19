@@ -1,7 +1,7 @@
 import os
-from .. import AUTH_USERS
 from ..helper.buttons import buttons
 from pyrogram import Client, filters
+from ..helper.__vars__ import auth_users_async
 
 
 async def anime(bot, update):
@@ -17,6 +17,7 @@ async def anime(bot, update):
 @Client.on_message(filters.command(["on"]))
 async def load(bot, update):
     user = update.from_user.id
+    AUTH_USERS = await auth_users_async()
     if user in AUTH_USERS:
         await anime(bot, update)
     else:

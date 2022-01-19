@@ -3,11 +3,12 @@ import sys
 import random
 import string
 import heroku3
+from .. import sayulog
 from shutil import rmtree
 from decouple import config
-from .. import AUTH_USERS, sayulog
 from pyrogram import Client, filters
 from moviepy.editor import VideoFileClip
+from ..helper.__vars__ import auth_users_async
 from ..Japanemi_features.anime_ import Downcap, foriter
 
 # ENV
@@ -19,6 +20,7 @@ HEROKU_APP_NAME = config("HEROKU_APP_NAME")
 async def __lstn__(bot, update):
     xxs = None
     print(update)
+    AUTH_USERS = await auth_users_async()
     if update.from_user.id in AUTH_USERS:
         links = Downcap(update.text).get_url()
         if links:

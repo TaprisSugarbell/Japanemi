@@ -1,5 +1,7 @@
 import os
 import sys
+import random
+import string
 import anilist
 import heroku3
 from .. import sayulog
@@ -8,6 +10,7 @@ from ..AnimeFlash import *
 from decouple import config
 from ..helper import servers
 from moviepy.editor import VideoFileClip
+from ..helper.__vars__ import auth_users_async
 from google_trans_new import google_translator
 from Japanemi.Japanemi_features.episodes import *
 from Japanemi.helper.texts import capupload_text, ani_desc
@@ -91,6 +94,75 @@ async def af_callback(bot, data, update, tmp_directory):
         else:
             rmtree(tmp_directory)
             sayulog.warning(f'{os.listdir("./Downloads/")}')
+
+
+async def up_(bot, dats, mdts):
+    xxs = None
+    data, chat_id, user_id, tmp_directory = dats
+    links, caption = mdts
+    _chat = chat_id or user_id
+    AUTH_USERS = await auth_users_async()
+    if user_id in AUTH_USERS:
+        msd = await bot.send_message(_chat,
+                                     "Descargando video.")
+        try:
+            sayulog.warning("Links: %r", links)
+            fff = await foriter(links, tmp_directory)
+            path = fff["file"]
+            file_type = fff["type"]
+            yes_thumb = fff["thumb"]
+            clip = VideoFileClip(path)
+            size = clip.size
+            height = size[1]
+            width = size[0]
+            duration = int(clip.duration)
+            print(duration)
+            print(os.listdir(tmp_directory))
+            try:
+                await bot.edit_message_text(chat_id=_chat,
+                                            text=f"Subiendo {file_type}.",
+                                            message_id=int(msd.message_id))
+            except Exception as e:
+                print(e)
+            if yes_thumb:
+                await bot.send_video(chat_id=_chat,
+                                     width=width,
+                                     height=height,
+                                     video=path,
+                                     thumb=yes_thumb,
+                                     caption=caption,
+                                     duration=duration)
+            else:
+                await bot.send_video(chat_id=_chat,
+                                     width=width,
+                                     height=height,
+                                     video=path,
+                                     caption=caption,
+                                     duration=duration)
+        except BlockingIOError as e:
+            sayulog.error(e)
+            xxs = await bot.send_message(chat_id=_chat,
+                                         text="Se lleno la memoria del bot, "
+                                              "se reiniciara y en 1m puedes dar click de nuevo :3.")
+            heroku_conn = heroku3.from_key(HEROKU_API_KEY)
+            app = heroku_conn.app(HEROKU_APP_NAME)
+            app.restart()
+        except Exception as e:
+            print(e)
+            sayulog.error("Ha ocurrido un error.", exc_info=e)
+            e = sys.exc_info()
+            err = '{}: {}'.format(str(e[0]).split("'")[1], e[1].args[0])
+            xxs = await bot.send_message(chat_id=_chat,
+                                         text=f"{err}\n📮 Envía este error a @SayuOgiwara")
+            raise
+        finally:
+            await bot.delete_messages(chat_id=_chat,
+                                      message_ids=int(msd.message_id))
+            if xxs:
+                rmtree("./Downloads")
+            else:
+                rmtree(tmp_directory)
+                sayulog.warning(f'{os.listdir("./Downloads/")}')
 
 
 async def ta_callback(bot, data, tmp_directory):

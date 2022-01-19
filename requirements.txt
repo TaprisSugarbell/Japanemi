@@ -25,3 +25,5 @@ python-ffmpeg
 ffmpeg~=1.4
 markdownify
 pyromod
+pymongo
+dnspython
