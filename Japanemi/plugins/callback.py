@@ -50,7 +50,16 @@ async def get_jk_servers(url):
 
     _script = soup.find_all("script")
     _lnks = re.compile(r'https?://[\w./?=#-]*')
-    _links = _lnks.findall(_script[13].string)
+    _lks = ""
+    for i in _script:
+        if hasattr(i, "string"):
+            if i.string:
+                if "var video = [];" in i.string:
+                    _lks = i.string
+                    break
+                else:
+                    pass
+    _links = _lnks.findall(_lks)
     _servers = []
     for _link in _links:
         mode = _link.split("/")[3].split("?")[0]
@@ -119,6 +128,10 @@ async def get_jk_servers(url):
         return [i for i in _servers if i]
 
 
+@Client.on_callback_query(filters.regex(r"\d*,"))
+async def __an__(bot, update):
+    print(update)
+    await ani_callback(bot, update)
 # @Client.on_callback_query(filters.regex(r"[ha]?\d*[!|,|-]"))
 # async def callback_data(bot, update):
 #     print(update)
