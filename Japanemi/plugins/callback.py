@@ -129,7 +129,7 @@ async def get_jk_servers(url):
         return [i for i in _servers if i]
 
 
-@Client.on_callback_query(filters.regex(r"\d*-"))
+@Client.on_callback_query(filters.regex(r"\d*-$"))
 async def __an__(bot, update):
     print(update)
     await Ani_callback(bot, update)
