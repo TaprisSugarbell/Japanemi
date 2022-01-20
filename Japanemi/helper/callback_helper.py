@@ -125,6 +125,25 @@ async def up_(bot, dats, mdts):
                                             message_id=int(msd.message_id))
             except Exception as e:
                 print(e)
+
+            if yes_thumb:
+                _video = await bot.send_video(_chat,
+                                              path,
+                                              caption,
+                                              width=width,
+                                              height=height,
+                                              thumb=yes_thumb,
+                                              duration=duration)
+            else:
+                _video = await bot.send_video(_chat,
+                                              path,
+                                              caption,
+                                              width=width,
+                                              height=height,
+                                              duration=duration)
+
+            print(_video)
+
             if inline_message_id:
                 print("inline")
                 if yes_thumb:
@@ -178,23 +197,7 @@ async def up_(bot, dats, mdts):
                             duration=duration
                         )
                     )
-            else:
-                print("chat")
-                if yes_thumb:
-                    await bot.send_video(_chat,
-                                         path,
-                                         caption,
-                                         width=width,
-                                         height=height,
-                                         thumb=yes_thumb,
-                                         duration=duration)
-                else:
-                    await bot.send_video(_chat,
-                                         path,
-                                         caption,
-                                         width=width,
-                                         height=height,
-                                         duration=duration)
+
         except BlockingIOError as e:
             sayulog.error(e)
             xxs = await bot.send_message(_chat,
