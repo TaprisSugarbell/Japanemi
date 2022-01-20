@@ -99,11 +99,16 @@ async def af_callback(bot, data, update, tmp_directory):
 
 async def up_(bot, dats, mdts):
     xxs = None
-    data, chat_id, user_id, (message_id, inline_message_id), tmp_directory = dats
-    links, caption = mdts
+    data, chat_id, user_id, (message_id, inline_message_id, query_id), tmp_directory = dats
+    links, caption, title, number = mdts
     _chat = chat_id or user_id
     AUTH_USERS = await auth_users_async()
     if user_id in AUTH_USERS:
+        await bot.answer_callback_query(
+            query_id,
+            f'Se esta subiendo "{title} {number}"',
+            True
+        )
         msd = await bot.send_message(_chat,
                                      "Descargando video.")
         try:
