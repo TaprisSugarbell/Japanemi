@@ -8,7 +8,7 @@ from ..helper.buttons import datos
 from pyrogram import Client, filters
 from google_trans_new import google_translator
 from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
-                            InlineKeyboardMarkup, InlineKeyboardButton)
+                            InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultPhoto)
 
 TAG = lambda anything: f"<a href='{anything}'>&#8205;</a>"
 order = lambda some_list, x: [some_list[i:i + x] for i in range(0, len(some_list), x)]
@@ -338,13 +338,11 @@ async def __jk__(bot, update):
             anime_uri = link_split[3]
             number = link_split[-2]
             results.append(
-                InlineQueryResultArticle(
+                InlineQueryResultPhoto(
+                    thumb,
                     title=title,
-                    input_message_content=InputTextMessageContent(
-                        message_text=f'{title} <a href="{thumb}">&#8205;</a>'
-                    ),
                     description=f'Capítulo {number}',
-                    thumb_url=thumb,
+                    caption=f'**{title}**',
                     reply_markup=InlineKeyboardMarkup(
                         [
                             [
@@ -357,6 +355,26 @@ async def __jk__(bot, update):
                     )
                 )
             )
+            # results.append(
+            #     InlineQueryResultArticle(
+            #         title=title,
+            #         input_message_content=InputTextMessageContent(
+            #             message_text=f'{title} <a href="{thumb}">&#8205;</a>'
+            #         ),
+            #         description=f'Capítulo {number}',
+            #         thumb_url=thumb,
+            #         reply_markup=InlineKeyboardMarkup(
+            #             [
+            #                 [
+            #                     InlineKeyboardButton("Lista de Episodios",
+            #                                          f'jk_{anime_uri}'),
+            #                     InlineKeyboardButton("Subir capítulo",
+            #                                          f'capjk_{anime_uri}_{number}')
+            #                 ]
+            #             ]
+            #         )
+            #     )
+            # )
         await bot.answer_inline_query(inlineQueryId,
                                       results,
                                       cache_time=1)

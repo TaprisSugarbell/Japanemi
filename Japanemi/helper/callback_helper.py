@@ -14,6 +14,7 @@ from ..helper.__vars__ import auth_users_async
 from google_trans_new import google_translator
 from Japanemi.Japanemi_features.episodes import *
 from Japanemi.helper.texts import capupload_text, ani_desc
+from pyrogram.types import InputMediaVideo, InputMediaPhoto
 from Japanemi.Japanemi_features.anime_ import Downcap, foriter
 from Japanemi.helper.buttons import inline_option, send_trailer
 
@@ -98,7 +99,7 @@ async def af_callback(bot, data, update, tmp_directory):
 
 async def up_(bot, dats, mdts):
     xxs = None
-    data, chat_id, user_id, tmp_directory = dats
+    data, chat_id, user_id, (message_id, inline_message_id), tmp_directory = dats
     links, caption = mdts
     _chat = chat_id or user_id
     AUTH_USERS = await auth_users_async()
@@ -124,26 +125,78 @@ async def up_(bot, dats, mdts):
                                             message_id=int(msd.message_id))
             except Exception as e:
                 print(e)
-            if yes_thumb:
-                await bot.send_video(chat_id=_chat,
-                                     width=width,
-                                     height=height,
-                                     video=path,
-                                     thumb=yes_thumb,
-                                     caption=caption,
-                                     duration=duration)
+            if inline_message_id:
+                if yes_thumb:
+                    await bot.edit_inline_media(
+                        inline_message_id,
+                        InputMediaVideo(
+                            path,
+                            yes_thumb,
+                            caption,
+                            width=width,
+                            height=height,
+                            duration=duration
+                        )
+                    )
+                else:
+                    await bot.edit_inline_media(
+                        inline_message_id,
+                        InputMediaVideo(
+                            path,
+                            caption=caption,
+                            width=width,
+                            height=height,
+                            duration=duration
+                        )
+                    )
+            elif message_id:
+                if yes_thumb:
+                    await bot.edit_message_media(
+                        _chat,
+                        message_id,
+                        InputMediaVideo(
+                            path,
+                            yes_thumb,
+                            caption,
+                            width=width,
+                            height=height,
+                            duration=duration
+                        )
+                    )
+                else:
+                    await bot.edit_message_media(
+                        _chat,
+                        message_id,
+                        InputMediaVideo(
+                            path,
+                            yes_thumb,
+                            caption,
+                            width=width,
+                            height=height,
+                            duration=duration
+                        )
+                    )
             else:
-                await bot.send_video(chat_id=_chat,
-                                     width=width,
-                                     height=height,
-                                     video=path,
-                                     caption=caption,
-                                     duration=duration)
+                if yes_thumb:
+                    await bot.send_video(_chat,
+                                         path,
+                                         caption,
+                                         width=width,
+                                         height=height,
+                                         thumb=yes_thumb,
+                                         duration=duration)
+                else:
+                    await bot.send_video(_chat,
+                                         path,
+                                         caption,
+                                         width=width,
+                                         height=height,
+                                         duration=duration)
         except BlockingIOError as e:
             sayulog.error(e)
-            xxs = await bot.send_message(chat_id=_chat,
-                                         text="Se lleno la memoria del bot, "
-                                              "se reiniciara y en 1m puedes dar click de nuevo :3.")
+            xxs = await bot.send_message(_chat,
+                                         "Se lleno la memoria del bot, "
+                                         "se reiniciara y en 1m puedes dar click de nuevo :3.")
             heroku_conn = heroku3.from_key(HEROKU_API_KEY)
             app = heroku_conn.app(HEROKU_APP_NAME)
             app.restart()
@@ -156,7 +209,7 @@ async def up_(bot, dats, mdts):
                                          text=f"{err}\n📮 Envía este error a @SayuOgiwara")
             raise
         finally:
-            await bot.delete_messages(chat_id=_chat,
+            await bot.delete_messages(_chat,
                                       message_ids=int(msd.message_id))
             if xxs:
                 rmtree("./Downloads")
