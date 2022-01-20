@@ -142,10 +142,7 @@ async def up_(bot, dats, mdts):
                                               height=height,
                                               duration=duration)
 
-            print(_video)
-
             if inline_message_id:
-                print("inline")
                 if yes_thumb:
                     await bot.edit_inline_media(
                         inline_message_id,
@@ -169,8 +166,11 @@ async def up_(bot, dats, mdts):
                             duration=duration
                         )
                     )
+                await bot.delete_messages(
+                    _chat,
+                    _video.message_id
+                )
             elif message_id:
-                print("message_id")
                 if yes_thumb:
                     await bot.edit_message_media(
                         _chat,
@@ -197,6 +197,10 @@ async def up_(bot, dats, mdts):
                             duration=duration
                         )
                     )
+                await bot.delete_messages(
+                    _chat,
+                    _video.message_id
+                )
 
         except BlockingIOError as e:
             sayulog.error(e)

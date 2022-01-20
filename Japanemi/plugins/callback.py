@@ -271,6 +271,11 @@ async def __capjk__(bot, update):
         soup = BeautifulSoup(r.content, "html.parser")
         title = soup.find("div", attrs={"id": "marcar_visto"}).get("data-title")
         caption = await capupload_text(title + " " + str(number))
+        await bot.answer_callback_query(
+            update.id,
+            f'Se esta subiendo "{title} {number}"',
+            True
+        )
         # UPLOAD
         mdts = links, caption
         dats = data, chat_id, user_id, (message_id, inline_message_id), tmp_directory
