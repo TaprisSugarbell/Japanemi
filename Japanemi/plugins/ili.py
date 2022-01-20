@@ -347,7 +347,7 @@ async def __jk__(bot, update):
                         [
                             [
                                 InlineKeyboardButton("Lista de Episodios",
-                                                     f'jk_{anime_uri}'),
+                                                     f'jk_{anime_uri}_1'),
                                 InlineKeyboardButton("Subir capítulo",
                                                      f'capjk_{anime_uri}_{number}')
                             ]
@@ -355,26 +355,6 @@ async def __jk__(bot, update):
                     )
                 )
             )
-            # results.append(
-            #     InlineQueryResultArticle(
-            #         title=title,
-            #         input_message_content=InputTextMessageContent(
-            #             message_text=f'{title} <a href="{thumb}">&#8205;</a>'
-            #         ),
-            #         description=f'Capítulo {number}',
-            #         thumb_url=thumb,
-            #         reply_markup=InlineKeyboardMarkup(
-            #             [
-            #                 [
-            #                     InlineKeyboardButton("Lista de Episodios",
-            #                                          f'jk_{anime_uri}'),
-            #                     InlineKeyboardButton("Subir capítulo",
-            #                                          f'capjk_{anime_uri}_{number}')
-            #                 ]
-            #             ]
-            #         )
-            #     )
-            # )
         await bot.answer_inline_query(inlineQueryId,
                                       results,
                                       cache_time=1)

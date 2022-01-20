@@ -241,7 +241,6 @@ async def __capblix__(bot, update):
 async def __capjk__(bot, update):
     print(update)
     xxs = None
-    # inline = None
     chat_id = None
     message_id = None
     inline_message_id = None
@@ -273,12 +272,20 @@ async def __capjk__(bot, update):
         title = soup.find("div", attrs={"id": "marcar_visto"}).get("data-title")
         caption = await capupload_text(title + " " + str(number))
         # UPLOAD
-        mdts = links, caption, title, number
-        dats = data, chat_id, user_id, (message_id, inline_message_id, query_id), tmp_directory
+        mdts = links, caption
+        dats = data, chat_id, user_id, (message_id, inline_message_id), tmp_directory
+        await bot.answer_callback_query(
+            query_id,
+            f'Se esta subiendo "{title} {number}"',
+            True
+        )
         await up_(bot, dats, mdts)
-
-
-
+    else:
+        await bot.answer_callback_query(
+            query_id,
+            f'Lo lamento pero no sos admin.\nSigue @Japanemision y @JapanAnime_Oficial',
+            True
+        )
 
 
 
