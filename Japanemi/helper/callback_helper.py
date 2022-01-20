@@ -150,7 +150,7 @@ async def up_(bot, dats, mdts):
                     await bot.edit_inline_media(
                         inline_message_id,
                         InputMediaVideo(
-                            path,
+                            _video.chat.video.file_id,
                             yes_thumb,
                             caption,
                             width=width,
@@ -176,7 +176,7 @@ async def up_(bot, dats, mdts):
                         _chat,
                         message_id,
                         InputMediaVideo(
-                            path,
+                            _video.chat.video.file_id,
                             yes_thumb,
                             caption,
                             width=width,
