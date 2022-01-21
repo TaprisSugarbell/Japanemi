@@ -368,6 +368,15 @@ async def __jk__(bot, update):
             title = result["title"]
             thumb = result["image"]
             anime_uri = result["slug"]
+            print(len(anime_uri))
+            print("M")
+            if len(anime_uri) > 54:
+                anime_uri = " ".join(title.split()[:4])
+                print(anime_uri)
+            print(len(anime_uri))
+            print()
+            print()
+            print()
             caption = f'**{title}**'
             results.append(
                 InlineQueryResultPhoto(

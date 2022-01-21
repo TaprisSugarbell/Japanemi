@@ -1,3 +1,4 @@
+import re
 import cloudscraper
 from bs4 import BeautifulSoup
 from pyromod.helpers import ikb
@@ -23,6 +24,25 @@ def item_title(item, page):
         return f'Capítulo {item["number"]}'
     else:
         return f'{rankey(8)}'
+
+
+async def request_anime_jk(requests, url, slug_title):
+    r = requests.get(url + slug_title, allow_redirects=False)
+    if r.status_code == 200:
+        return r
+    else:
+        r = requests.get(
+            "https://jkanime.net/ajax/ajax_search/",
+            params={
+                "q": slug_title
+            }
+        )
+        for anime in r.json()["animes"]:
+            mt = re.match(rf"{slug_title}", anime["title"])
+            if mt:
+                return requests.get(url + anime["slug"])
+            else:
+                pass
 
 
 @Client.on_callback_query(filters.regex(r"jk_.*"))
@@ -59,7 +79,8 @@ async def __capsjk__(bot, update):
         page = int(data_split[-1])
         anime_uri = data_split[1]
         url = url_base + anime_uri
-        r = requests.get(url)
+        # r = requests.get(url)
+        r = await request_anime_jk(requests, url_base, anime_uri)
         soup = BeautifulSoup(r.content, "html.parser")
         anime_id = soup.find("div", {"id": "guardar-anime"}).get("data-anime")
         title = soup.find("div", attrs={"class": "anime__details__title"}).find("h3").string
