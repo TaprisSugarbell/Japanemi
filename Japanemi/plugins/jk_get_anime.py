@@ -27,7 +27,7 @@ def item_title(item, page):
 
 
 async def request_anime_jk(requests, url, slug_title):
-    r = requests.get(url + slug_title, allow_redirects=False)
+    r = requests.get(url + slug_title + "/", allow_redirects=False)
     if r.status_code == 200:
         return r
     else:
