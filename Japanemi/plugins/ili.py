@@ -307,20 +307,22 @@ async def __blix__(bot, update):
     #                               results)
 
 
-@Client.on_inline_query(filters.regex(r"^<jk>\s*"))
+@Client.on_inline_query(filters.regex(r"^<jk>[.\s]*"))
 async def __jk__(bot, update):
     print(update)
+    results = []
     parser = "html.parser"
     url = "https://jkanime.net"
     inlineQueryId = update.id
-    query = update.query.strip()[1:-1]
-    if query == "jk":
+    query = update.query
+    quer = query.strip()[1:-1]
+    requests = cloudscraper.create_scraper(cloudscraper.Session)
+    if quer == "jk":
         try:
             offset = int(update.offset)
         except ValueError:
             offset = 1
 
-        requests = cloudscraper.create_scraper(cloudscraper.Session)
         r = requests.get(url)
         soup = BeautifulSoup(r.content, "html.parser")
         caps = soup.find("div", {"class": "maximoaltura"}).find_all("a")
@@ -328,7 +330,6 @@ async def __jk__(bot, update):
         # print(type(caps))
         # a = AnimeFlash("")
         # animes = a.anime(offset)
-        results = []
         for cap in caps:
             _ti = cap.find("img")
             title = _ti.get("alt")
@@ -355,6 +356,35 @@ async def __jk__(bot, update):
                     )
                 )
             )
+    else:
+        url_find = "https://jkanime.net/ajax/ajax_search/"
+        r = requests.get(
+            url_find,
+            params={
+                "q": query.replace("<jk>", "").strip()
+            }
+        )
+        for result in r.json()["animes"]:
+            title = result["title"]
+            thumb = result["image"]
+            anime_uri = result["slug"]
+            caption = f'**{title}**'
+            results.append(
+                InlineQueryResultPhoto(
+                    thumb,
+                    title=title,
+                    caption=caption,
+                    reply_markup=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton("Lista de Episodios",
+                                                     f'jk_{anime_uri}_1')
+                            ]
+                        ]
+                    )
+                )
+            )
+
         await bot.answer_inline_query(inlineQueryId,
                                       results,
                                       cache_time=1)
