@@ -9,7 +9,7 @@ from ..helper.__vars__ import auth_users_async
 
 
 def page_data(page):
-    return f'jk_{page}_{anime_uri}'
+    return f'jk_{anime_uri}_{page}'
 
 
 def item_data(item, page):
@@ -78,12 +78,12 @@ async def __capsjk__(bot, update):
         data_split = data.split("_")
         page = int(data_split[-1])
         anime_uri = data_split[1]
-        url = url_base + anime_uri
+        # url = url_base + anime_uri
         # r = requests.get(url)
         r = await request_anime_jk(requests, url_base, anime_uri)
         soup = BeautifulSoup(r.content, "html.parser")
         anime_id = soup.find("div", {"id": "guardar-anime"}).get("data-anime")
-        title = soup.find("div", attrs={"class": "anime__details__title"}).find("h3").string
+        # title = soup.find("div", attrs={"class": "anime__details__title"}).find("h3").string
         number_of_pages = len(soup.find("div", {"class": "anime__pagination"}).find_all("a"))
 
         results = requests.get(
