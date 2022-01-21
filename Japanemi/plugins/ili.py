@@ -385,7 +385,7 @@ async def __jk__(bot, update):
                 )
             )
 
-        await bot.answer_inline_query(inlineQueryId,
-                                      results,
-                                      cache_time=1)
+    await bot.answer_inline_query(inlineQueryId,
+                                  results,
+                                  cache_time=1)
 
