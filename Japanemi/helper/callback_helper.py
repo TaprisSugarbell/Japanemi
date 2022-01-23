@@ -140,65 +140,65 @@ async def up_(bot, dats, mdts):
                                           height=height,
                                           duration=duration)
 
-        if inline_message_id:
-            if yes_thumb:
-                await bot.edit_inline_media(
-                    inline_message_id,
-                    InputMediaVideo(
-                        _video.video.file_id,
-                        yes_thumb,
-                        caption,
-                        width=width,
-                        height=height,
-                        duration=duration
-                    )
-                )
-            else:
-                await bot.edit_inline_media(
-                    inline_message_id,
-                    InputMediaVideo(
-                        _video.video.file_id,
-                        caption=caption,
-                        width=width,
-                        height=height,
-                        duration=duration
-                    )
-                )
-            await bot.delete_messages(
-                _chat,
-                _video.message_id
-            )
-        elif message_id:
-            if yes_thumb:
-                await bot.edit_message_media(
-                    _chat,
-                    message_id,
-                    InputMediaVideo(
-                        _video.video.file_id,
-                        yes_thumb,
-                        caption,
-                        width=width,
-                        height=height,
-                        duration=duration
-                    )
-                )
-            else:
-                await bot.edit_message_media(
-                    _chat,
-                    message_id,
-                    InputMediaVideo(
-                        _video.video.file_id,
-                        yes_thumb,
-                        caption,
-                        width=width,
-                        height=height,
-                        duration=duration
-                    )
-                )
-            await bot.delete_messages(
-                _chat,
-                _video.message_id
-            )
+        # if inline_message_id:
+        #     if yes_thumb:
+        #         await bot.edit_inline_media(
+        #             inline_message_id,
+        #             InputMediaVideo(
+        #                 _video.video.file_id,
+        #                 yes_thumb,
+        #                 caption,
+        #                 width=width,
+        #                 height=height,
+        #                 duration=duration
+        #             )
+        #         )
+        #     else:
+        #         await bot.edit_inline_media(
+        #             inline_message_id,
+        #             InputMediaVideo(
+        #                 _video.video.file_id,
+        #                 caption=caption,
+        #                 width=width,
+        #                 height=height,
+        #                 duration=duration
+        #             )
+        #         )
+        #     await bot.delete_messages(
+        #         _chat,
+        #         _video.message_id
+        #     )
+        # elif message_id:
+        #     if yes_thumb:
+        #         await bot.edit_message_media(
+        #             _chat,
+        #             message_id,
+        #             InputMediaVideo(
+        #                 _video.video.file_id,
+        #                 yes_thumb,
+        #                 caption,
+        #                 width=width,
+        #                 height=height,
+        #                 duration=duration
+        #             )
+        #         )
+        #     else:
+        #         await bot.edit_message_media(
+        #             _chat,
+        #             message_id,
+        #             InputMediaVideo(
+        #                 _video.video.file_id,
+        #                 yes_thumb,
+        #                 caption,
+        #                 width=width,
+        #                 height=height,
+        #                 duration=duration
+        #             )
+        #         )
+        #     await bot.delete_messages(
+        #         _chat,
+        #         _video.message_id
+        #     )
 
     except BlockingIOError as e:
         sayulog.error(e)
