@@ -30,6 +30,7 @@ async def capupload_text(title):
         if len(_ec) > 0:
             cap = _ec[-1]
         else:
+            titl = titl.replace(titl.split()[-1], "").strip()
             cap = 1
         twc = "_".join(titl.replace(" " + str(cap), "").split()).replace(".", "").replace("-", "_")
         twg = titl.replace(" " + str(cap), "")
