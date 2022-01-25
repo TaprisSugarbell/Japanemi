@@ -269,7 +269,7 @@ async def __capjk__(bot, update):
         number = data_split[-1]
         url = url_base + anime_uri + "/" + number
         sayulog.warning(f'{data_split} {url}')
-        r = await request_anime_jk(requests, url_base, anime_uri, "/" + number)
+        r = await request_anime_jk(requests, url_base, anime_uri, "/" + number + "/")
         if " " in url:
             url = r.url
         links = await get_jk_servers(url)
