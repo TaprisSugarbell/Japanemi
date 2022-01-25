@@ -173,6 +173,29 @@ async def __ani__(bot, update):
     except ValueError:
         offset = 1
     if len(query) == 0:
+        results.append(
+            InlineQueryResultArticle(
+                title="Busca un anime",
+                input_message_content=InputTextMessageContent(
+                    "Busca un anime."
+                ),
+                description="Prueba buscando el anime que te gusta.",
+                thumb_url="https://tinyurl.com/iwakuralaln",
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                "AniList",
+                                switch_inline_query_current_chat="<ani> "
+                            )
+                        ]
+                    ]
+                )
+            )
+        )
+        await bot.answer_inline_query(inlineQueryId,
+                                      results)
+    else:
         animes = await find_anime(query, page=offset)
         a = anilist.AsyncClient()
         for anime in animes:
@@ -219,29 +242,6 @@ async def __ani__(bot, update):
             except Exception as e:
                 print(e)
                 raise
-    else:
-        results.append(
-            InlineQueryResultArticle(
-                title="Busca un anime",
-                input_message_content=InputTextMessageContent(
-                    "Busca un anime."
-                ),
-                description="Prueba buscando el anime que te gusta.",
-                thumb_url="https://tinyurl.com/iwakuralaln",
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                "AniList",
-                                switch_inline_query_current_chat="<ani> "
-                            )
-                        ]
-                    ]
-                )
-            )
-        )
-    await bot.answer_inline_query(inlineQueryId,
-                                  results)
 
 
 @Client.on_inline_query(filters.regex(r"<blix> (\?|.*)"))
