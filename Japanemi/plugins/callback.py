@@ -269,8 +269,8 @@ async def __capjk__(bot, update):
         number = data_split[-1]
         url = url_base + anime_uri + "/" + number
         links = await get_jk_servers(url)
-        r = await request_anime_jk(requests, url_base, anime_uri, number + "/")
-        sayulog.warning(f'"{r.status_code}" [{r.url}]')
+        r = await request_anime_jk(requests, url_base, anime_uri, "/" + number)
+        sayulog.warning(f'"{r.status_code}" [{r.url}] [{r.request.url}]')
         soup = BeautifulSoup(r.content, "html.parser")
         title = soup.find("div", attrs={"id": "marcar_visto"}).get("data-title")
         caption = await capupload_text(title + " " + str(number))
