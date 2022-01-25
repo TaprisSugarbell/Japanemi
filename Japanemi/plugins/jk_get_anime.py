@@ -26,8 +26,8 @@ def item_title(item, page):
         return f'{rankey(8)}'
 
 
-async def request_anime_jk(requests, url, slug_title, slug_add=""):
-    r = requests.get(url + slug_title + "/" + slug_add, allow_redirects=False)
+async def request_anime_jk(requests, url, slug_title, slug_add="/"):
+    r = requests.get(url + slug_title + slug_add, allow_redirects=False)
     if r.status_code == 200:
         return r
     else:
