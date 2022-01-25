@@ -26,7 +26,7 @@ def item_title(item, page):
         return f'{rankey(8)}'
 
 
-async def request_anime_jk(requests, url, slug_title):
+async def request_anime_jk(requests, url, slug_title, slug_add=""):
     r = requests.get(url + slug_title + "/", allow_redirects=False)
     if r.status_code == 200:
         return r
@@ -40,7 +40,7 @@ async def request_anime_jk(requests, url, slug_title):
         for anime in r.json()["animes"]:
             mt = re.match(rf"{slug_title}", anime["title"])
             if mt:
-                return requests.get(url + anime["slug"])
+                return requests.get(url + anime["slug"] + slug_add)
             else:
                 pass
 

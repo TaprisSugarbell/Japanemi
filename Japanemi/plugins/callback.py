@@ -2,8 +2,8 @@ import re
 import bcrypt
 import random
 import string
-from shutil import rmtree
 from decouple import config
+from shutil import rmtree
 from ..helper.buttons import *
 from ..plugins.Japanemi import *
 from ..helper.callback_helper import *
@@ -11,6 +11,7 @@ from moviepy.editor import VideoFileClip
 from ..helper.texts import capupload_text
 from ..helper.__vars__ import auth_users_async
 from ..Japanemi_features.utils import create_folder
+from ..plugins.jk_get_anime import request_anime_jk
 
 CHANNEL_ID = config("CHANNEL_ID", default=None, cast=int)
 
@@ -268,6 +269,7 @@ async def __capjk__(bot, update):
         url = url_base + anime_uri + "/" + number
         links = await get_jk_servers(url)
         r = requests.get(url)
+        r = request_anime_jk(requests, url_base, anime_uri, "/" + number)
         soup = BeautifulSoup(r.content, "html.parser")
         title = soup.find("div", attrs={"id": "marcar_visto"}).get("data-title")
         caption = await capupload_text(title + " " + str(number))

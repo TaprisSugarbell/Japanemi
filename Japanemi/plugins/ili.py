@@ -337,6 +337,8 @@ async def __jk__(bot, update):
             link = cap.get("href")
             link_split = link.split("/")
             anime_uri = link_split[3]
+            if len(anime_uri) > 54:
+                anime_uri = " ".join(title.split()[:4])
             number = link_split[-2]
             results.append(
                 InlineQueryResultPhoto(
