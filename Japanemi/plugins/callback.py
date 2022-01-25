@@ -273,7 +273,7 @@ async def __capjk__(bot, update):
         if " " in url:
             url = r.url
         links = await get_jk_servers(url)
-        sayulog.warning(f'"{r.status_code}" [{r.request.url}] [{r.url}]')
+        sayulog.warning(f'"{r.status_code}" [{r.request.url}] [{r.url}] {links}')
         soup = BeautifulSoup(r.content, "html.parser")
         title = soup.find("div", attrs={"id": "marcar_visto"}).get("data-title")
         caption = await capupload_text(title + " " + str(number))
