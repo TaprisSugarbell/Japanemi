@@ -159,65 +159,89 @@ async def __nnl__(bot, update):
         pass
 
 
-@Client.on_inline_query(filters.regex(r"<ani> (\?|.*)"))
+@Client.on_inline_query(filters.regex(r"^<ani>[.\s]*"))
 async def __ani__(bot, update):
     print(update)
     # tr = google_translator()
     user_id = update.from_user.id
-    query = update.query.replace("<ani> ", "")
+    query = update.query.replace("<ani>", "").strip()
     inlineQueryId = update.id
     print(query)
+    results = []
     try:
         offset = int(update.offset)
     except ValueError:
         offset = 1
-    animes = await find_anime(query, page=offset)
-    results = []
-    a = anilist.AsyncClient()
-    for anime in animes:
-        # print(anime)
-        title = anime.title
-        get = await a.get_anime(anime.id)
-        dsc = ""
-        if hasattr(get, "format"):
-            dsc += f"{get.format}, "
-        if hasattr(get, "episodes"):
-            dsc += f"({get.episodes} episodes)"
-        else:
-            dsc += f"(*?)"
+    if len(query) == 0:
+        animes = await find_anime(query, page=offset)
+        a = anilist.AsyncClient()
+        for anime in animes:
+            # print(anime)
+            title = anime.title
+            get = await a.get_anime(anime.id)
+            dsc = ""
+            if hasattr(get, "format"):
+                dsc += f"{get.format}, "
+            if hasattr(get, "episodes"):
+                dsc += f"({get.episodes} episodes)"
+            else:
+                dsc += f"(*?)"
+            results.append(
+                InlineQueryResultArticle(
+                    title=title.romaji,
+                    input_message_content=InputTextMessageContent(
+                        message_text=f"**{title.romaji}**\n({title.native})\n"
+                                     f"{TAG('https://img.anili.st/media/' + str(anime.id))}"
+                    ),
+                    description=dsc,
+                    thumb_url=f"https://img.anili.st/media/{anime.id}",
+                    reply_markup=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton("Información", f"{anime.id}-")
+                            ]
+                        ]
+                    )
+                )
+            )
+            try:
+                print("inline")
+                await bot.answer_inline_query(inlineQueryId,
+                                              results,
+                                              next_offset=f"{offset + 1}")
+            except pyrogram.errors.QueryIdInvalid:
+                print("noinline")
+                btns_unorder = [InlineKeyboardButton(anime.title.romaji, f"{anime.id}-") for anime in animes]
+                btns = order(btns_unorder, 1)
+                await bot.send_message(chat_id=user_id,
+                                       text="Sorry por tardar 😭",
+                                       reply_markup=InlineKeyboardMarkup(btns))
+            except Exception as e:
+                print(e)
+                raise
+    else:
         results.append(
             InlineQueryResultArticle(
-                title=title.romaji,
+                title="Busca un anime",
                 input_message_content=InputTextMessageContent(
-                    message_text=f"**{title.romaji}**\n({title.native})\n"
-                                 f"{TAG('https://img.anili.st/media/' + str(anime.id))}"
+                    "Busca un anime."
                 ),
-                description=dsc,
-                thumb_url=f"https://img.anili.st/media/{anime.id}",
+                description="Prueba buscando el anime que te gusta.",
+                thumb_url="https://tinyurl.com/iwakuralaln",
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
-                            InlineKeyboardButton("Información", f"{anime.id}-")
+                            InlineKeyboardButton(
+                                "AniList",
+                                switch_inline_query_current_chat="<ani> "
+                            )
                         ]
                     ]
                 )
             )
         )
-    try:
-        print("inline")
-        await bot.answer_inline_query(inlineQueryId,
-                                      results,
-                                      next_offset=f"{offset + 1}")
-    except pyrogram.errors.QueryIdInvalid:
-        print("noinline")
-        btns_unorder = [InlineKeyboardButton(anime.title.romaji, f"{anime.id}-") for anime in animes]
-        btns = order(btns_unorder, 1)
-        await bot.send_message(chat_id=user_id,
-                               text="Sorry por tardar 😭",
-                               reply_markup=InlineKeyboardMarkup(btns))
-    except Exception as e:
-        print(e)
-        raise
+    await bot.answer_inline_query(inlineQueryId,
+                                  results)
 
 
 @Client.on_inline_query(filters.regex(r"<blix> (\?|.*)"))
