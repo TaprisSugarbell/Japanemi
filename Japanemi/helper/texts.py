@@ -31,7 +31,7 @@ async def capupload_text(title):
             cap = _ec[-1]
         else:
             cap = 1
-        twc = "_".join(titl.replace(" " + cap, "").split()).replace(".", "").replace("-", "_")
+        twc = "_".join(titl.replace(" " + str(cap), "").split()).replace(".", "").replace("-", "_")
         twg = titl.replace(" " + cap, "")
     caption = \
         f"#{twc}\n" \
