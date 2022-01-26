@@ -76,8 +76,7 @@ async def __capotakustv__(bot, update):
     AUTH_USERS = await auth_users_async()
     if user_id in AUTH_USERS:
         # Carpeta
-        # tmp_directory = create_folder(user_id)
-        tmp_directory = ""
+        tmp_directory = create_folder(user_id)
         # ****************************************************************
         blnk = "https://www.otakustv.com/anime/"
         data_split = data.split("_")
