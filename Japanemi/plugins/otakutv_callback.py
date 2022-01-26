@@ -50,7 +50,7 @@ async def get_otakutv_cap(requests, url):
 
 
 @Client.on_callback_query(filters.regex(r"capotakustv_.*"))
-async def __capotakutv__(bot, update):
+async def __capotakustv__(bot, update):
     print(update)
     xxs = None
     title = ""
@@ -97,6 +97,11 @@ async def __capotakutv__(bot, update):
             )
         url = blnk + anime_uri + "/" + anime_episode
         sayulog.warning(f'{data_split} {url}')
+        await bot.answer_callback_query(
+            query_id,
+            f'Se estan analizando los links disponibles de: "{title} {number}"',
+            True
+        )
         links = await get_otakutv_cap(requests, url)
         print(links)
         # r = requests.get(url)
@@ -106,11 +111,6 @@ async def __capotakutv__(bot, update):
         # UPLOAD
         mdts = links, caption
         dats = data, chat_id, user_id, (message_id, inline_message_id), tmp_directory
-        await bot.answer_callback_query(
-            query_id,
-            f'Se esta subiendo "{title} {number}"',
-            True
-        )
         await up_(bot, dats, mdts)
     else:
         await bot.answer_callback_query(
