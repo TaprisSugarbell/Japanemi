@@ -6,12 +6,15 @@ import pyrogram.errors
 from bs4 import BeautifulSoup
 from ..helper.buttons import datos
 from pyrogram import Client, filters
+from ..helper.mongo_connect import *
+from ..Japanemi_features.utils import rankey
 from google_trans_new import google_translator
 from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
                             InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultPhoto)
 
 TAG = lambda anything: f"<a href='{anything}'>&#8205;</a>"
 order = lambda some_list, x: [some_list[i:i + x] for i in range(0, len(some_list), x)]
+ra = Mongo(URI, "Japanemi", "otakustv")
 
 
 def ak():
@@ -73,6 +76,12 @@ async def __menu__(bot, update):
                                              switch_inline_query_current_chat='<blix> '),
                         InlineKeyboardButton("Jkanime",
                                              switch_inline_query_current_chat='<jk> ')
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            "Otakustv",
+                            switch_inline_query_current_chat="<otakustv> "
+                        )
                     ]
                 ]
             )
@@ -416,4 +425,78 @@ async def __jk__(bot, update):
     await bot.answer_inline_query(inlineQueryId,
                                   results,
                                   cache_time=1)
+
+
+@Client.on_inline_query(filters.regex(r"^<otakustv>[.\s]*"))
+async def __otakutv__(bot, update):
+    print(update)
+    results = []
+    anime_key = None
+    parser = "html.parser"
+    inlineQueryId = update.id
+    query = update.query
+    quer = query.strip()[1:-1]
+    url = "https://www.otakustv.com"
+    blnk = "https://www.otakustv.com/anime/"
+    requests = cloudscraper.create_scraper(cloudscraper.Session)
+    if quer == "otakustv":
+        r = requests.get(
+            url
+        )
+        soup = BeautifulSoup(r.content, parser)
+        for i in soup.find("div", attrs={"class": "row"}).find_all("div"):
+            thumb = i.find("img").get("data-src")
+            title = i.find("img").get("alt")
+            link = i.find("a").get("href")
+            description = i.find("a").get("title")
+            episode = i.find("p").string.split()[-1]
+            link_split = link.split("/")
+            anime_uri = link_split[-2]
+            anime_episode = link_split[-1]
+            _c = await confirm(ra, {"anime_uri": anime_uri,
+                                    "anime_episode": anime_episode})
+            if _c:
+                _c = _c[0]
+                anime_key = _c["anime_key"]
+            else:
+                anime_key = rankey(30)
+                await add_(ra, {
+                    "anime": title,
+                    "episode": episode,
+                    "anime_key": anime_key,
+                    "anime_uri": anime_uri,
+                    "anime_episode": anime_episode
+                }
+                           )
+            results.append(
+                InlineQueryResultArticle(
+                    title + " | " + episode,
+                    InputTextMessageContent(
+                        title + " " + TAG(thumb)
+                    ),
+                    None,
+                    InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton("Lista de Episodios",
+                                                     f'{rankey(8)}'),
+                                InlineKeyboardButton(
+                                    "Subir capítulo",
+                                    f'capotakustv_{anime_key}'
+                                )
+                            ]
+                        ]
+                    ),
+                    None,
+                    description,
+                    thumb
+                )
+            )
+        await bot.answer_inline_query(inlineQueryId,
+                                      results,
+                                      cache_time=1)
+    else:
+        pass
+
+
 

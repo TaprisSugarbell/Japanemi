@@ -100,6 +100,12 @@ async def remove_(user_db, data=None):
     return user_db.delete_one(data)
 
 
+async def remove_many(user_db, data=None):
+    if data is None:
+        data = {}
+    return user_db.delete_many(data)
+
+
 def confirm_ofdb(user_db, data=None):
     if data is None:
         data = {}
@@ -126,7 +132,7 @@ def remove_ofdb(user_db, data=None):
     return user_db.delete_one(data)
 
 
-def remove_many(user_db, data=None):
+def remove_many_ofdb(user_db, data=None):
     if data is None:
         data = {}
     return user_db.delete_many(data)
