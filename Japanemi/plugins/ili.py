@@ -207,7 +207,8 @@ async def __ani__(bot, update):
     else:
         animes = await find_anime(query, page=offset)
         a = anilist.AsyncClient()
-        print(animes)
+        if isinstance(animes, tuple):
+            animes = animes[0]
         for anime in animes:
             # print(anime)
             title = anime.title
