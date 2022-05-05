@@ -207,6 +207,7 @@ async def __ani__(bot, update):
     else:
         animes = await find_anime(query, page=offset)
         a = anilist.AsyncClient()
+        print(animes)
         for anime in animes:
             # print(anime)
             title = anime.title
