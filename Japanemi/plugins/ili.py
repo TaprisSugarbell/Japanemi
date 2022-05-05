@@ -15,6 +15,7 @@ from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
 TAG = lambda anything: f"<a href='{anything}'>&#8205;</a>"
 order = lambda some_list, x: [some_list[i:i + x] for i in range(0, len(some_list), x)]
 ra = Mongo(URI, "Japanemi", "otakustv")
+ttls = Mongo(URI, "Japanemi", "titles_jk")
 
 
 def ak():
@@ -405,7 +406,7 @@ async def __jk__(bot, update):
             title = result["title"]
             thumb = result["image"]
             anime_uri = result["slug"]
-            if len(anime_uri) > 54:
+            if len(anime_uri) > 30:
                 anime_uri = " ".join(title.split()[:4])
             caption = f'**{title}**'
             results.append(
