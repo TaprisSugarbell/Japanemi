@@ -37,8 +37,9 @@ async def request_anime_jk(requests, url, slug_title, slug_add="/"):
                 "q": slug_title
             }
         )
-        for anime in r.json()["animes"]:
-            mt = re.match(rf"{slug_title}", anime["title"])
+        animes = r.json()["animes"]
+        for anime in animes:
+            mt = re.findall(rf"{slug_title}", anime["title"].lower())
             if mt:
                 return requests.get(url + anime["slug"] + slug_add)
             else:
