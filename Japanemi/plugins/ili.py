@@ -373,8 +373,10 @@ async def __jk__(bot, update):
             link = cap.get("href")
             link_split = link.split("/")
             anime_uri = link_split[3]
-            if len(anime_uri) > 54:
-                anime_uri = " ".join(title.split()[:4])
+            if len(anime_uri) > 30:
+                # anime_uri = " ".join(title.split()[-5:])
+                anime_uri = " ".join(anime_uri.split("-")[-5:])
+            print(anime_uri)
             number = link_split[-2]
             results.append(
                 InlineQueryResultPhoto(
@@ -406,7 +408,7 @@ async def __jk__(bot, update):
             title = result["title"]
             thumb = result["image"]
             anime_uri = result["slug"]
-            if len(anime_uri) > 30:
+            if len(anime_uri) > 54:
                 anime_uri = " ".join(title.split()[:4])
             caption = f'**{title}**'
             results.append(
