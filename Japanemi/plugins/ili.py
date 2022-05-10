@@ -15,7 +15,7 @@ from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
 TAG = lambda anything: f"<a href='{anything}'>&#8205;</a>"
 order = lambda some_list, x: [some_list[i:i + x] for i in range(0, len(some_list), x)]
 ra = Mongo(URI, "Japanemi", "otakustv")
-ttls = Mongo(URI, "Japanemi", "titles_jk")
+ttls = Mongo(URI, "Japanemi", "slugs")
 
 
 def ak():
@@ -504,4 +504,80 @@ async def __otakutv__(bot, update):
         pass
 
 
+@Client.on_inline_query(filters.regex(r"^<ao>[.\s]*"))
+async def __anime_online__(bot, update):
+    print(update)
+    results = []
+    anime_key = None
+    parser = "html.parser"
+    inlineQueryId = update.id
+    query = update.query
+    quer = query.strip()[1:-1]
+    url = "https://www1.animeonline.ninja"
+    blnk = "https://www1.animeonline.ninja/episodio/{}/"
+    requests = cloudscraper.create_scraper(cloudscraper.Session)
+    # Get caps
+    r = requests.get(
+        url
+    )
+    soup = BeautifulSoup(r.content, parser)
+    _items = soup.find("div", attrs={"class": "items"})
+    for _item in _items:
+        if not isinstance(_item.find("h3"), int):
+            # print(_item)
+            _spans = _item.find_all("span")
+            if len(_spans) > 1:
+                qua = f'[{_spans[-1].string}]'
+            else:
+                qua = ""
+            _link_of_cap = _item.find("a").get("href")
+            lnk_splt = _link_of_cap.split("/")
+            _dem = lnk_splt[-3]
+            slug = _link_of_cap.split("/")[-2]
+            thumb = _item.find("img").get("data-src")
+            title = _item.find("h3").text
+            episode = _item.find("h4").text.strip().split()[-1]
+            cap_key = rankey(10)
+            dts = {
+                "cap_key": cap_key,
+                "title": title,
+                "dem": _dem,
+                "slug": slug,
+                "episode": episode
+            }
+            _c = await confirm(
+                ttls,
+                {
+                    "title": title,
+                    "dem": _dem,
+                    "slug": slug,
+                    "episode": episode
+                }
+            )
+            if _c:
+                _c = _c[0]
+                cap_key = _c["cap_key"]
+            else:
+                await add_(ttls, dts)
+            results.append(
+                InlineQueryResultPhoto(
+                    thumb,
+                    title=title,
+                    caption=f'**{title}**',
+                    description=f'Capítulo {episode} {qua}',
+                    reply_markup=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton("Lista de Episodios", "nth"),
+                                InlineKeyboardButton("Subir capítulo", f"capao_{cap_key}_Non")
+                            ]
+                        ]
+                    )
+                )
+            )
+        else:
+            pass
 
+    await bot.answer_inline_query(inlineQueryId,
+                                  results,
+                                  cache_time=1)

@@ -7,14 +7,18 @@ from shutil import rmtree
 from decouple import config
 from ..helper.buttons import *
 from ..plugins.Japanemi import *
+from ..helper.mongo_connect import *
 from ..helper.callback_helper import *
 from moviepy.editor import VideoFileClip
 from ..helper.texts import capupload_text
 from ..helper.__vars__ import auth_users_async
+from ..helper.get_servers import get_ao_servers
 from ..Japanemi_features.utils import create_folder
+from ..plugins.ao_get_anime import request_anime_ao
 from ..plugins.jk_get_anime import request_anime_jk
 
 CHANNEL_ID = config("CHANNEL_ID", default=None, cast=int)
+ttls = Mongo(URI, "Japanemi", "slugs")
 
 
 def ak():
@@ -296,13 +300,90 @@ async def __capjk__(bot, update):
         )
 
 
-
-
-
-
-
-
-
+@Client.on_callback_query(filters.regex(r"capao_.*"))
+async def __capao__(bot, update):
+    print(update)
+    xxs = None
+    chat_id = None
+    message_id = None
+    inline_message_id = None
+    query_id = update.id
+    user_id = update.from_user.id
+    try:
+        data = update.data
+        chat_id = update.message.chat.id
+        message_id = update.message.message_id
+    except AttributeError:
+        # data = update.data + "$"
+        # Ese data es por si falla y lo dejo como antes
+        # nt2 = Solo dios sabe que chinga estoy haciendo
+        data = update.data
+        inline_message_id = update.inline_message_id
+    AUTH_USERS = await auth_users_async()
+    if user_id in AUTH_USERS:
+        c = cloudscraper.create_scraper()
+        # Carpeta
+        tmp_directory = create_folder(user_id)
+        # ****************************************************************
+        url_base = "https://www1.animeonline.ninja/"
+        data_split = data.split("_")
+        slug_key = data_split[1]
+        lngj = data_split[-1]
+        if lngj == "Non":
+            lngj = None
+        _c = await confirm(ttls, {"cap_key": slug_key})
+        _c = _c[0]
+        title = _c["title"]
+        _dem = _c["dem"]
+        slug = _c["slug"]
+        episode = _c["episode"]
+        url = f'{url_base}{_dem}/{slug}/'
+        sayulog.warning(f'{data_split} {url}')
+        r = c.get(url, allow_redirects=False)
+        soup = BeautifulSoup(r.content, "html.parser")
+        # title_find = soup.find("h1", attrs={"class": "epih1"}).text.strip()
+        # title = re.subn(r':\s\d*x\d*', "", title)[0]
+        sl = await get_ao_servers(url, lngj)
+        print(sl)
+        if isinstance(sl, dict):
+            lbsl = []
+            if sl["JP"]:
+                lbsl.append(
+                    InlineKeyboardButton("JP", f'capao_{slug_key}_JP')
+                )
+            if sl["LAT"]:
+                lbsl.append(
+                    InlineKeyboardButton("LAT", f'capao_{slug_key}_LAT')
+                )
+            if sl["ES"]:
+                lbsl.append(
+                    InlineKeyboardButton("ES", f'capao_{slug_key}_ES')
+                )
+            await bot.edit_inline_reply_markup(
+                inline_message_id,
+                InlineKeyboardMarkup(
+                    [
+                        lbsl
+                    ]
+                )
+            )
+        else:
+            caption = await capupload_text(title + " " + str(episode))
+            # UPLOAD
+            mdts = sl, caption
+            dats = data, chat_id, user_id, (message_id, inline_message_id), tmp_directory
+            await bot.answer_callback_query(
+                query_id,
+                f'Se esta subiendo "{title} {episode}"',
+                True
+            )
+            await up_(bot, dats, mdts)
+    else:
+        await bot.answer_callback_query(
+            query_id,
+            f'Lo lamento pero no sos admin.\nSigue @Japanemision y @JapanAnime_Oficial',
+            True
+        )
 
 
 
