@@ -4,6 +4,7 @@ import base64
 import requests
 import urllib.request
 from bs4 import BeautifulSoup
+from moviepy.editor import VideoFileClip
 from .extractors import generic_extractor
 from urllib.parse import quote_plus, unquote
 
@@ -254,7 +255,15 @@ async def foriter(links=None, out="./", custom=""):
                 pass
             else:
                 out_ = generic_extractor(url, out=out, custom=custom)
-                # out_ = out_["file"]
+                path = out_["file"]
+                file_type = out_["type"]
+                yes_thumb = out_["thumb"]
+                clip = VideoFileClip(path)
+                size = clip.size
+                height = size[1]
+                width = size[0]
+                duration = int(clip.duration)
+                out_ = path, file_type, yes_thumb, size, height, width, duration
                 break
         except Exception as e:
             print(e)

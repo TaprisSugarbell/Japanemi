@@ -107,14 +107,15 @@ async def up_(bot, dats, mdts):
     try:
         sayulog.warning("Links: %r", links)
         fff = await foriter(links, tmp_directory)
-        path = fff["file"]
-        file_type = fff["type"]
-        yes_thumb = fff["thumb"]
-        clip = VideoFileClip(path)
-        size = clip.size
-        height = size[1]
-        width = size[0]
-        duration = int(clip.duration)
+        path, file_type, yes_thumb, size, height, width, duration = fff
+        # path = fff["file"]
+        # file_type = fff["type"]
+        # yes_thumb = fff["thumb"]
+        # clip = VideoFileClip(path)
+        # size = clip.size
+        # height = size[1]
+        # width = size[0]
+        # duration = int(clip.duration)
         print(duration)
         print(os.listdir(tmp_directory))
         try:
