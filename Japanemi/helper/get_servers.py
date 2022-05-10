@@ -48,13 +48,21 @@ async def get_ao_servers(url, lngj=None):
         if audlat is None and audes is None:
             for i in audjp:
                 lenk = i.get("onclick")
-                lenks.append(re.findall(r"https?://[\w./-]*", lenk)[0])
+                lenku = re.findall(r"https?://[\w./-]*", lenk)[0]
+                if lenku.split("/")[2] == "hqq.to":
+                    pass
+                else:
+                    lenks.append(lenku)
             return lenks
         elif lngj:
             server = servers[lngj]
             for i in server:
                 lenk = i.get("onclick")
-                lenks.append(re.findall(r"https?://[\w./-]*", lenk)[0])
+                lenku = re.findall(r"https?://[\w./-]*", lenk)[0]
+                if lenku.split("/")[2] == "hqq.to":
+                    pass
+                else:
+                    lenks.append(lenku)
             return lenks
         else:
             return servers
