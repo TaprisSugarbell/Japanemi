@@ -73,8 +73,8 @@ async def __menu__(bot, update):
                         )
                     ],
                     [
-                        InlineKeyboardButton("AnimeBlix",
-                                             switch_inline_query_current_chat='<blix> '),
+                        InlineKeyboardButton("AnimeOnline",
+                                             switch_inline_query_current_chat='<ao> '),
                         InlineKeyboardButton("Jkanime",
                                              switch_inline_query_current_chat='<jk> ')
                     ],
