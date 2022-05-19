@@ -372,11 +372,14 @@ async def __capao__(bot, update):
             # UPLOAD
             mdts = sl, caption
             dats = data, chat_id, user_id, (message_id, inline_message_id), tmp_directory
-            await bot.answer_callback_query(
-                query_id,
-                f'Se esta subiendo "{title} {episode}"',
-                True
-            )
+            try:
+                await bot.answer_callback_query(
+                    query_id,
+                    f'Se esta subiendo "{title} {episode}"',
+                    True
+                )
+            except Exception as e:
+                sayulog.warning(f'{e}')
             await up_(bot, dats, mdts)
     else:
         await bot.answer_callback_query(

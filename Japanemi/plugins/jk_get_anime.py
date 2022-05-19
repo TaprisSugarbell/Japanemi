@@ -39,11 +39,13 @@ async def request_anime_jk(requests, url, slug_title, slug_add="/"):
         )
         animes = r.json()["animes"]
         for anime in animes:
-            mt = re.findall(rf"{slug_title}", " ".join(anime["slug"].split("-")[-5:]))
+            print(anime)
+            anime_slug = anime["image"].split("/")[-1][:-4]
+            mt = re.findall(rf"{slug_title}", " ".join(anime_slug.split("-")[-5:]))
             if not mt:
                 mt = re.findall(rf"{slug_title}", anime["title"].lower())
             if mt:
-                return requests.get(url + anime["slug"] + slug_add)
+                return requests.get(url + anime_slug + slug_add)
             else:
                 pass
 
