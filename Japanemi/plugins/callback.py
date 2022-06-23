@@ -57,6 +57,7 @@ async def get_jk_servers(url):
 
     _script = soup.find_all("script")
     _lnks = re.compile(r'https?://[\w./?=#-]*')
+    # _lnks = re.compile(r'(https?:/)?[\w./?=#-]*')
     _lks = ""
     for i in _script:
         if hasattr(i, "string"):
@@ -66,7 +67,8 @@ async def get_jk_servers(url):
                     break
                 else:
                     pass
-    _links = _lnks.findall(_lks)
+    _links = _lnks.findall(_lks.replace('src="/', 'src="https://jkanime.net/'))
+    print(_links)
     _servers = []
     for _link in _links:
         mode = _link.split("/")[3].split("?")[0]
